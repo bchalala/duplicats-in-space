@@ -3,26 +3,29 @@
 
 import csv
 
-paperDict = dict()
-duplicates = set()
+def matchingPaperIds():
+    paperDict = dict()
+    duplicates = set()
 
-with open("dataRev2/Paper.csv") as csvfile:
-    fn = ['id', 'title', 'year', 'conferenceid', 'journalid', 'keywords']
-    reader = csv.DictReader(csvfile, fieldnames=fn)
-    for row in reader:
-        title = row['title']
+    with open("dataRev2/Paper.csv") as csvfile:
+        fn = ['id', 'title', 'year', 'conferenceid', 'journalid', 'keywords']
+        reader = csv.DictReader(csvfile, fieldnames=fn)
+        for row in reader:
+            title = row['title']
+            paperId = (row['id'], row['conferenceid'], row['journalid'])
 
-        if title is "":
-            continue
-            
-        if title in paperDict:
-            pids = paperDict[title]
-            pids.add(row['id'])
-            paperDict[title] = pids
-            duplicates.add(title)
-        else:
-            paperDict[title] = set(row['id'])
+            if title is "":
+                continue   
+            if title in paperDict:
+                paperDict[title].add(paperId)
+                duplicates.add(title)
+            else:
+                paperDict[title] = set(paperId)
 
-for elem in duplicates:
-    print(elem)
-    print(paperDict[elem])
+    for entry in duplicates:
+        print(entry)
+        print(paperDict[entry])
+    
+    return (paperDict, duplicates)
+
+matchingPaperIds()
