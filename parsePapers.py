@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 
 import csv
+from unidecode import unidecode
 
 
 ''' 
@@ -34,7 +35,7 @@ def matchingPaperIds():
     duplicateDict = dict()
 
     for entry in duplicateNames:
-        duplicateNames[entry] = paperDict[entry]
+        duplicateDict[entry] = paperDict[entry]
         for item in paperDict[entry]:
             duplicateIds.add(int(item))
 
@@ -46,10 +47,12 @@ def matchingPaperIds():
 
 ''' 
     Given a paperIdSet, this function will attempt to get all of the authors
-    for the papers in the set of paperIdSet
+    for the papers in the set of paperIdSet. Any strings that are not ascii
+    will be automatically converted to ascii. Additionally, they will be made
+    lowercase. 
 '''
 
-def getNamesOfPapers(paperIdSet):
+def getPaperAuthorsFromSet(paperIdSet):
     pidToAuthor = dict()
 
     with open("dataRev2/PaperAuthor.csv") as csvfile:
@@ -57,7 +60,8 @@ def getNamesOfPapers(paperIdSet):
         for row in reader:
             paperId = row['PaperId']
             authorId = row['AuthorId']
-            authorName = row['Name']
+            authorName = unidecode(row['Name'])
+            authorName = authorName.lower()
             if int(paperId) in paperIdSet:
                 if paperId in pidToAuthor:
                     pidToAuthor[paperId].append((authorId, authorName))
@@ -66,6 +70,68 @@ def getNamesOfPapers(paperIdSet):
 
     return pidToAuthor
 
+'''
+    Returns all authors with their id as their duplicate
+'''
+def authors():
+    authorToAuthorSet = dict()
 
+    with open("dataRev2/Author.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            aId = int(row['Id'])
+            authorSet[aId] = aId
+
+    return authorToAuthorSet
+
+
+''' 
+    This function will go through each author's duplicate set and take the union of
+    the current author's duplicates and each item in the duplicate set's duplicates.
+    If there are no changes detected after the process, we are finished. Otherwise,
+    we do it again.
+'''
+
+def unifyAuthorDuplicates(authorDict):
+
+    change = False
+    authors = authorDict.keys()
+
+    for author in authors:
+        duplicates = authorDict[author]
+        newDups = duplicates
+        for dup in duplicates:
+            if authorDict[dup] != newDups:
+                newDups = newDups.union(authorDict[dup])
+                authorDict[dup] = newDups
+                change = True
+
+        if newDups != duplicates:
+            authorDict[author] = newDups
+
+    if change is False:
+        return authorDict
+    else:
+        return unifyAuthorDuplicates(authorDict)
+
+
+testdict = {1: set([1]), 2: set([1, 2]), 3: set([3, 1])}
+unifyAuthorDuplicates(testdict)
+for item in testdict.keys():
+    print(item)
+    print(testdict[item])
+
+
+''' 
 (dupPaperDict, dupNames, dupIds) = matchingPaperIds()
-getNamesOfPapers(dupIds)
+pidToAuthor = getPaperAuthorsFromSet(dupIds)
+
+authorDict = authors()
+duplicateAuthors = set()
+
+# Get all Ids for a given duplicate paper name
+for name in dupNames:
+    paperIds = dupPaperDict[name]
+
+'''
+
