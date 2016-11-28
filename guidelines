@@ -1,0 +1,103 @@
+I was thinking of dividing the programing into a couple components...
+
+(After reading into a data for a bit, it seems like the csv was scrapped from a collection of websites heh)
+
+Recommend for each step we product a csv because:
+	maintain original data
+	check progress/debug. Some process should even be broken down to smaller components.
+
+*******************************************************
+1. clean up Authors in Author.csv and PaperAuthor.csv
+*******************************************************
+
+	Possibly sort the ID.
+
+	Strip write space letters, two spaces in a row. 
+
+	A lot of the Author's name has non ISO 8859-1 characters, we should try to translate those into actual ASCII characters.
+
+	Some author has a possible nickname so we should account for that, 
+	i.e. Betty White and Elizabeth White. 
+
+	Names that contains " of " should not be considered for duplicates. A lot of commons words like "for" "and" "a", "not" with spaces should not be considered either to prevent false positives.
+
+	Names that contains "Systems" should not be considered for duplicates. (865421)
+
+	The cases when there are extra characters in their names:
+		"862252 F, -J, Leven"
+
+	There are cases where first name, middle name, last name are all initials, 869568 "J. H. C.", not sure what should we do with them...
+
+	Notice there are also super commons names like "2160784 F.Chu" should not be considered a duplicate for like "Frank Chu" since the name is so freaking common. Haven't deicided on how to account for this... Name length?
+
+	Some author also has misspelling in their name, so we should check the difference of their first name (not sure about last here), if they diff by one letter, maybe we count this as a possible duplicate..? For each author, we have to store its full name, full name if their with their only first initials:
+	John Smith, J. Smith
+
+	For some Asian names, there's also:
+	Ho-Min Lee = Ho Min Lee = Homin Lee
+
+
+******************************************************************
+2. clean up Afficliations in Author.csv and PaperAuthor.csv
+******************************************************************
+
+	Unnecssary white space characters and non-alphnum characters
+
+	For afficiliation, ";", "|" and "/" means a department of, i.e:
+		Department of Physics | Stanford University
+
+		In this case, the affication above should be the same as Stanford University
+
+	Get rid of the single character words
+
+	if it contains "system", "labs", "univerisity" without other words, consider it as mis-entered and not to be considered
+
+	Cases when:
+		Stanford Univeristy = Stanford
+
+		1. Remove university and check
+		2. For each affilication, add some possible aliases (this is definitely gonna take up a lot of spaces)
+
+	deal with / remove the HTML tags, e.g.
+		<sup> textHere </sup>
+
+	remove rows with it's empty or only has white spaces
+
+	Sort it..?
+
+********************************************
+3. clean up The titles in Paper.csv 
+********************************************
+
+	Unnecessary " character before the title sometimes. 
+
+	Check cases since it's pretty inconsitstent
+
+	strip white spaces
+
+	remove the title if it has less than 3 words (a 2 word title for a paper wouldn't make sense)
+	
+	Sort it..?
+
+
+
+Notice for each 1,2 and 3 steps we want to check for special characters as well (characters that's not Enligsh and needed to be translated)
+
+****************************************************************************************
+4. remove the obvious duplicates by finding matching IDs in different files. 
+****************************************************************************************
+
+(I think this should be seperate so we can incrementally see our result)
+	Joining Author and PaperAuthor data for the ID, names and affilications
+	Joining Paper and PaperAuthor data for the paper ID. 
+
+	should be fairly straightforward...? The syntaxes might be weird. 
+
+****************************************************************************************
+5. Make up some sort of rules to count the frequencies of each author's first and last name. Notice there are misspelled names, nick name and first/last names with only initials. We have to come up with an algorithm to decide how to use those frequencies to decide whether a certain author is a duplicate or not.
+****************************************************************************************
+	Thinking of using a Hash Table here to speed the program up since we want to test it a lot. Preferrable to be done on a computer that has ample space. 
+
+
+Feel free to critique, comment and add stuff here.
+
