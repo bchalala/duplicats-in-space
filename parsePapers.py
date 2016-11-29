@@ -144,14 +144,18 @@ for paperID, authorList in pidToAuthor.items():
     sanitizedNames = []
     for (authorId, authorName) in authorList:
         authorNames.append(authorName)
+
+        # remove unnusual characters before pattern scan
         sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
         sanitizedNames.append(sanitizedName)
 
-    patterns = prefixScan.mine(sanitizedNames, minsup)
     print(authorNames)
+
+    patterns = prefixScan.mine(sanitizedNames, minsup)
+    # ignore short patterns and turn lists into strings for readability
     readablePatterns = []
     for (pattern, support) in patterns:
         if (len(pattern) >= minwidth):
             readablePatterns.append(''.join(pattern))
-    print(readablePatterns)
+    print("- patterns: " + str(readablePatterns))
 

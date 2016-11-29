@@ -1,0 +1,17 @@
+--- Duplicate Papers ---
+Priming Frequencies of Transcranial Magnetic Stimulation over Wernicke's Area Modulate Word Detection: 768, 1732
+Editorial: 1145, 5184
+Compressed Sensing with Coherent and Redundant Dictionaries: 3064, 5761
+--- Paper Authors ---
+['p. p. groumpos']
+- patterns: []
+['ceyda oguz', 'kirk pruhs']
+- patterns: []
+['j.-l. martinot', 'e. artiges', 'c. pallier', 'christophe pallier', 'j. andoh', 'd. riviere', 'j.-f. mangin', 'm.-l. paillere-martinot']
+- patterns: ['paller']
+['yonina c. eldar', 'deanna needell', 'emmanuel j. candes', 'paige randall']
+- patterns: []
+['yonina c. eldar', 'paige randall', 'deanna needell', 'emmanuel j. candes']
+- patterns: []
+['eric artiges', 'christophe pallier', 'christophe pallier', 'jamila andoh', 'denis riviere', 'jean-francois mangin', 'marie-laure paillere', 'jean-luc martinot']
+- patterns: ['raller', 'rilier', 'riller', 'riaier', 'rialle', 'rialler', 'riallr', 'rialer', 'riepie', 'riepier', 'riepir', 'riepll', 'rieplle', 'riepller', 'riepllr', 'rieplr', 'rieple', 'riepler', 'riepai', 'riepaie', 'riepaier', 'riepair', 'riepal', 'riepall', 'riepalle', 'riepaller', 'riepallr', 'riepalr', 'riepale', 'riepaler', 'riepar', 'riepae', 'riepaer', 'rieper', 'rieier', 'rieler', 'rielie', 'rielier', 'rielir', 'rielle', 'rieller', 'riellr', 'rieaer', 'rieaie', 'rieaier', 'rieair', 'rieall', 'riealle', 'riealler', 'rieallr', 'riealr', 'rieale', 'riealer', 'ripier', 'riplle', 'ripller', 'ripllr', 'ripler', 'ripaie', 'ripaier', 'ripair', 'ripall', 'ripalle', 'ripaller', 'ripallr', 'ripalr', 'ripale', 'ripaler', 'ripaer', 'repier', 'replle', 'repller', 'repllr', 'repler', 'repaie', 'repaier', 'repair', 'repall', 'repalle', 'repaller', 'repallr', 'repalr', 'repale', 'repaler', 'repaer', 'relier', 'reller', 'reaier', 'realle', 'realler', 'reallr', 'realer', 'rpller', 'rpaier', 'rpalle', 'rpaller', 'rpallr', 'rpaler', 'ealler', 'epller', 'epaier', 'epalle', 'epaller', 'epallr', 'epaler', 'paller', 'ialler', 'iepier', 'ieplle', 'iepller', 'iepllr', 'iepler', 'iepaie', 'iepaier', 'iepair', 'iepall', 'iepalle', 'iepaller', 'iepallr', 'iepalr', 'iepale', 'iepaler', 'iepaer', 'ielier', 'ieller', 'ieaier', 'iealle', 'iealler', 'ieallr', 'iealer', 'ipller', 'ipaier', 'ipalle', 'ipaller', 'ipallr', 'ipaler']
