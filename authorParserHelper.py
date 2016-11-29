@@ -19,6 +19,9 @@ def nicknameMapping():
 	''' There are better ways to get this data. But I think for the purpose of this program, 
 	it's best to just use this customized dictionary'''
 	D = {}
+	D['betty'] = 'elizabeth'
+	D['liz'] = 'elizabeth'
+	D['lizzy'] = 'elizabeth'
 	D['ana'] = 'anna'
 	D['ann'] = 'anna'
 	D['anne'] = 'anna'
@@ -176,6 +179,8 @@ def nicknameMapping():
 	return D
 
 def checkMistakenNames(nameString):
+	"""There are some names in the database that is not of person names, 
+	we don't consider those in this case"""
 	if nameString.contains(' or '):
 		return True
 
@@ -200,14 +205,18 @@ def checkMistakenNames(nameString):
 	return False
 
 def removeNonalphanum(nameString):
+	"""This function deletes the mistakenly entered characters"""
 	nameString.replace("~", "")
 	nameString.replace("`", "")
-	nameString.replace("|", "e")
+	nameString.replace("|", "")
 	nameString.replace("_", "") 
 	nameString.replace("\\", "")
-	nameString.replace(" \(\w+\)", "") #Multiple whitespace characters
+	nameString.replace(" \(\w+\)", " ") #Multiple whitespace characters
 	nameString.str.replace(",", " ")
 	nameString.replace("'", "")
+
+	# This takes cares of asian names I think. 
+	# Need to check if this generates false positives
 	nameString.replace("-", "")
 	nameString.replace("\. ", " ")
 	nameString.replace("\.", " ")
@@ -215,10 +224,34 @@ def removeNonalphanum(nameString):
 
 	return nameString
 
-def handleSpecialCases(nameString):
+def SpecialCharCases(nameString):
+	"""Some special cases handling here."""
 	nameString.replace(" iii", "")
 	nameString.replace(" ii$", "")
 	nameString.replace(" iv$", "")
-	nameString.replace(" mbbs", "")
+	nameString.replace(" mbbs", "") ## need to check this
+	
+	return nameString
+
+def generateNamesWithInitials(nameString):
+	""" A function that will generate initials given a normal name"""
+
+	## Perhaps we want a dot in the end? J. Smith oppose to J Smith?
+	wordArray = nameString.split()
+	numWords = len(wordArray)
+	index = 0
+	stringWithInitials = ''
+	while (index < numWords-1):
+		stringWithInitials += wordArray[index][0]
+		stringWithInitials += ' '
+		index += 1
+
+	stringWithInitials += wordArray[numWords-1]
+
+	return stringWithInitials
+
+
+
+
 
 
