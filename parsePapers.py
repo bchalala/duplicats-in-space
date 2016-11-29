@@ -4,6 +4,7 @@
 import csv
 from unidecode import unidecode
 
+dataDirectory = "sampleData/"
 
 ''' 
     This function will return the dictionary which contains only papers that are
@@ -18,7 +19,7 @@ def matchingPaperIds():
     duplicateIds = set()
 
 
-    with open("dataRev2/Paper.csv") as csvfile:
+    with open(dataDirectory + "Paper.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             title = row['Title']
@@ -55,7 +56,7 @@ def matchingPaperIds():
 def getPaperAuthorsFromSet(paperIdSet):
     pidToAuthor = dict()
 
-    with open("dataRev2/PaperAuthor.csv") as csvfile:
+    with open(dataDirectory + "PaperAuthor.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             paperId = row['PaperId']
@@ -76,11 +77,11 @@ def getPaperAuthorsFromSet(paperIdSet):
 def authors():
     authorToAuthorSet = dict()
 
-    with open("dataRev2/Author.csv") as csvfile:
+    with open(dataDirectory + "Author.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             aId = int(row['Id'])
-            authorSet[aId] = aId
+            authorToAuthorSet[aId] = aId
 
     return authorToAuthorSet
 
@@ -133,5 +134,6 @@ duplicateAuthors = set()
 for name in dupNames:
     paperIds = dupPaperDict[name]
 
+print(dupPaperDict)
+print(dupNames)
 '''
-
