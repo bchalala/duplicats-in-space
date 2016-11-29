@@ -8,6 +8,10 @@ sampleDataDir = "sampleData"
 
 '''
 Creates sample data from PaperAuthor, Paper, Author csv files and saves to sampleDataDir
+
+USAGE:
+    mkdir sampleData
+    python3 sampleData.py
 '''
 def buildSampleData(numPapers, inputDir, outputDir):
     papers = set()
@@ -30,7 +34,7 @@ def buildSampleData(numPapers, inputDir, outputDir):
                 writer.writerow(row)
 
     copyFile("Author.csv", authors, inputDir, outputDir)
-    copyFile("Paper.csv", authors, inputDir, outputDir)
+    copyFile("Paper.csv", papers, inputDir, outputDir)
     return papers, authors
 
 def copyFile(filename, Ids, inputDir, outputDir):
@@ -47,6 +51,6 @@ def copyFile(filename, Ids, inputDir, outputDir):
                     writer.writerow(row)
 
 
-papers, authors = buildSampleData(1000, dataDir, sampleDataDir)
+papers, authors = buildSampleData(6000, dataDir, sampleDataDir)
 print("number of papers copied: %d" % len(papers))
 print("number of authors copied: %d" % len(authors))

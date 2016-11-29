@@ -115,7 +115,7 @@ def unifyAuthorDuplicates(authorDict):
     else:
         return unifyAuthorDuplicates(authorDict)
 
-
+'''
 testdict = {1: set([1]), 2: set([1, 2]), 3: set([3, 1])}
 unifyAuthorDuplicates(testdict)
 for item in testdict.keys():
@@ -130,10 +130,7 @@ pidToAuthor = getPaperAuthorsFromSet(dupIds)
 authorDict = authors()
 duplicateAuthors = set()
 
-# Get all Ids for a given duplicate paper name
-for name in dupNames:
-    paperIds = dupPaperDict[name]
+print("--- Duplicate Papers ---")
+for key, value in dupPaperDict.items():
+    print(key + ": " + ', '.join(value))
 
-print(dupPaperDict)
-print(dupNames)
-'''
