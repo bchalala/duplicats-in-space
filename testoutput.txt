@@ -1,0 +1,17 @@
+--- Duplicate Papers ---
+Priming Frequencies of Transcranial Magnetic Stimulation over Wernicke's Area Modulate Word Detection: 768, 1732
+Compressed Sensing with Coherent and Redundant Dictionaries: 3064, 5761
+Editorial: 1145, 5184
+--- Paper Authors ---
+['yonina c. eldar', 'paige randall', 'deanna needell', 'emmanuel j. candes']
+[]
+['j.-l. martinot', 'e. artiges', 'c. pallier', 'christophe pallier', 'j. andoh', 'd. riviere', 'j.-f. mangin', 'm.-l. paillere-martinot']
+['paller']
+['ceyda oguz', 'kirk pruhs']
+[]
+['eric artiges', 'christophe pallier', 'christophe pallier', 'jamila andoh', 'denis riviere', 'jean-francois mangin', 'marie-laure paillere', 'jean-luc martinot']
+['ealler', 'epller', 'epaier', 'epaler', 'epalle', 'epaller', 'epallr', 'paller', 'repler', 'replle', 'repller', 'repllr', 'repaer', 'repaie', 'repaier', 'repair', 'repale', 'repaler', 'repalr', 'repall', 'repalle', 'repaller', 'repallr', 'repier', 'realer', 'realle', 'realler', 'reallr', 'reaier', 'reller', 'relier', 'raller', 'rpaier', 'rpaler', 'rpalle', 'rpaller', 'rpallr', 'rpller', 'rieper', 'rieple', 'riepler', 'rieplr', 'riepll', 'rieplle', 'riepller', 'riepllr', 'riepae', 'riepaer', 'riepar', 'riepai', 'riepaie', 'riepaier', 'riepair', 'riepal', 'riepale', 'riepaler', 'riepalr', 'riepall', 'riepalle', 'riepaller', 'riepallr', 'riepie', 'riepier', 'riepir', 'rieaer', 'rieale', 'riealer', 'riealr', 'rieall', 'riealle', 'riealler', 'rieallr', 'rieaie', 'rieaier', 'rieair', 'rieier', 'rieler', 'rielle', 'rieller', 'riellr', 'rielie', 'rielier', 'rielir', 'riaier', 'rialer', 'rialle', 'rialler', 'riallr', 'riller', 'rilier', 'ripaer', 'ripaie', 'ripaier', 'ripair', 'ripale', 'ripaler', 'ripalr', 'ripall', 'ripalle', 'ripaller', 'ripallr', 'ripier', 'ripler', 'riplle', 'ripller', 'ripllr', 'iepler', 'ieplle', 'iepller', 'iepllr', 'iepaer', 'iepaie', 'iepaier', 'iepair', 'iepale', 'iepaler', 'iepalr', 'iepall', 'iepalle', 'iepaller', 'iepallr', 'iepier', 'iealer', 'iealle', 'iealler', 'ieallr', 'ieaier', 'ieller', 'ielier', 'ialler', 'ipaier', 'ipaler', 'ipalle', 'ipaller', 'ipallr', 'ipller']
+['yonina c. eldar', 'deanna needell', 'emmanuel j. candes', 'paige randall']
+[]
+['p. p. groumpos']
+[]

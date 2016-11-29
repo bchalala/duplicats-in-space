@@ -6,13 +6,13 @@ Perform prefixScan algorithm on data, return frequent patterns with correspondin
 '''
 def mine(db, minsup):
     results = []
-    prefixSpan(db, minsup, [], results, [(i, 0) for i in range(len(db))])
+    prefixScan_rec(db, minsup, [], results, [(i, 0) for i in range(len(db))])
     return results
 
 '''
 Recursive implementation of prefixScan
 '''
-def prefixSpan_rec(db, minsup, patt, results, mdb):
+def prefixScan_rec(db, minsup, patt, results, mdb):
     results.append((patt, len(mdb)))
 
     occurs = defaultdict(list)
@@ -25,13 +25,13 @@ def prefixSpan_rec(db, minsup, patt, results, mdb):
 
     for c, newmdb in occurs.items():
         if len(newmdb) >= minsup:
-            prefixSpan_rec(db, minsup, patt + [c], results, newmdb)
+            prefixScan_rec(db, minsup, patt + [c], results, newmdb)
 
 '''
 Run tests to test pattern mining
 Expected output: [([], 4), ([0], 2), ([1], 4), ([1, 1], 2), ([1, 1, 1], 2), ([1, 2], 3), ([1, 2, 2], 2), ([1, 3], 2), ([1, 3, 4], 2), ([1, 4], 2), ([2], 3), ([2, 2], 2), ([3], 2), ([3, 4], 2), ([4], 2)]
 '''
-def testPrefixSpan():
+def testPrefixScan():
     db = [
         [0, 1, 2, 3, 4],
         [1, 1, 1, 3, 4],
@@ -45,4 +45,4 @@ def testPrefixSpan():
 
 
 
-# testPrefixSpan()
+# testPrefixScan()

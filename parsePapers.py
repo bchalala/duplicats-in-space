@@ -3,6 +3,8 @@
 
 import csv
 from unidecode import unidecode
+import prefixScan
+import re
 
 dataDirectory = "sampleData/"
 
@@ -133,4 +135,23 @@ duplicateAuthors = set()
 print("--- Duplicate Papers ---")
 for key, value in dupPaperDict.items():
     print(key + ": " + ', '.join(value))
+
+print("--- Paper Authors ---")
+minsup = 3
+minwidth = 6
+for paperID, authorList in pidToAuthor.items():
+    authorNames = []
+    sanitizedNames = []
+    for (authorId, authorName) in authorList:
+        authorNames.append(authorName)
+        sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
+        sanitizedNames.append(sanitizedName)
+
+    patterns = prefixScan.mine(sanitizedNames, minsup)
+    print(authorNames)
+    readablePatterns = []
+    for (pattern, support) in patterns:
+        if (len(pattern) >= minwidth):
+            readablePatterns.append(''.join(pattern))
+    print(readablePatterns)
 
