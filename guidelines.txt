@@ -38,12 +38,12 @@ Recommend for each step we product a csv because:
 
 
 ******************************************************************
-2. clean up Afficliations in Author.csv and PaperAuthor.csv
+2. clean up Affiliations in Author.csv and PaperAuthor.csv
 ******************************************************************
 
 	Unnecssary white space characters and non-alphnum characters
 
-	For afficiliation, ";", "|" and "/" means a department of, i.e:
+	For affiliation, ";", "|" and "/" means a department of, i.e:
 		Department of Physics | Stanford University
 
 		In this case, the affication above should be the same as Stanford University
@@ -56,7 +56,7 @@ Recommend for each step we product a csv because:
 		Stanford Univeristy = Stanford
 
 		1. Remove university and check
-		2. For each affilication, add some possible aliases (this is definitely gonna take up a lot of spaces)
+		2. For each affiliation, add some possible aliases (this is definitely gonna take up a lot of spaces)
 
 	deal with / remove the HTML tags, e.g.
 		<sup> textHere </sup>
