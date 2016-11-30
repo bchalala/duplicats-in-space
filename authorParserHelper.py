@@ -206,30 +206,31 @@ def checkMistakenNames(nameString):
 
 def removeNonalphanum(nameString):
 	"""This function deletes the mistakenly entered characters"""
-	nameString.replace("~", "")
-	nameString.replace("`", "")
-	nameString.replace("|", "")
-	nameString.replace("_", "") 
-	nameString.replace("\\", "")
-	nameString.replace(" \(\w+\)", " ") #Multiple whitespace characters
-	nameString.str.replace(",", " ")
-	nameString.replace("'", "")
+	nameString = nameString.replace("~", "")
+	nameString = nameString.replace("`", "")
+	nameString = nameString.replace("|", "")
+	nameString = nameString.replace("_", "") 
+	nameString = nameString.replace("\\", "")
+	nameString = nameString.replace("  ", " ") #Multiple whitespace characters
+	nameString = nameString.replace(",", " ")
+	nameString = nameString.replace("'", "")
 
 	# This takes cares of asian names I think. 
 	# Need to check if this generates false positives
-	nameString.replace("-", "")
-	nameString.replace("\. ", " ")
-	nameString.replace("\.", " ")
-	nameString.replace("\?", " ")
+	nameString = nameString.replace("-", "")
+	nameString = nameString.replace("\. ", " ")
+	nameString = nameString.replace("\.", " ")
+	nameString = nameString.replace("\?", " ")
 
 	return nameString
 
 def SpecialCharCases(nameString):
 	"""Some special cases handling here."""
-	nameString.replace(" iii", "")
-	nameString.replace(" ii$", "")
-	nameString.replace(" iv$", "")
-	nameString.replace(" mbbs", "") ## need to check this
+	nameString = nameString.replace(" iii", "")
+
+	nameString = nameString.replace(" ii", "")
+	nameString = nameString.replace(" iv", "")
+	nameString = nameString.replace(" mbbs", "") ## need to check this
 	
 	return nameString
 

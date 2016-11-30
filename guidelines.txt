@@ -80,6 +80,7 @@ Recommend for each step we product a csv because:
 	
 	Sort it..?
 
+J: I'll try to finish 1,2,3's functions by Tuesday tonight.
 
 
 Notice for each 1,2 and 3 steps we want to check for special characters as well (characters that's not Enligsh and needed to be translated)

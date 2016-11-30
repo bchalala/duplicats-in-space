@@ -13,7 +13,8 @@ class AuthorTest(unittest.TestCase):
 
 	def testRemove(self):
 		testString1 = 'a~bla-|_  a,b-'
-		expectedString1 = 'ablaa b'
+		expectedString1 = 'abla a b'
+		print(aph.removeNonalphanum(testString1))
 		self.assertTrue(expectedString1 == aph.removeNonalphanum(testString1))
 
 	def testSpecialCase(self):
