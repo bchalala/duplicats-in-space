@@ -9,3 +9,6 @@ Additionally, you must install the module Unidecode using pip. `pip install unid
 3. Unify authors with similar names, e.g. offset by 2, other similarities.
 
 Other things too.
+
+To run the unit test script, simply do:
+$sh runTests.sh

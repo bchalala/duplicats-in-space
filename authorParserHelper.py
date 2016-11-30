@@ -16,8 +16,8 @@ def removeAccents2(dataToTranslate):
 
 
 def nicknameMapping():
-	''' There are better ways to get this data. But I think for the purpose of this program, 
-	it's best to just use this customized dictionary'''
+	""" There are better ways to get this data. But I think for the purpose of this program, 
+	it's best to just use this customized dictionary"""
 	D = {}
 	D['betty'] = 'elizabeth'
 	D['liz'] = 'elizabeth'
@@ -181,26 +181,29 @@ def nicknameMapping():
 def checkMistakenNames(nameString):
 	"""There are some names in the database that is not of person names, 
 	we don't consider those in this case"""
-	if nameString.contains(' or '):
+	if ' or ' in nameString:
 		return True
 
-	if nameString.contains('for '):
+	if ' for ' in nameString:
 		return True
 
-	if nameString.contains(' and '):
+	if ' and ' in nameString:
 		return True
 	
-	if re.match('^a ', nameString):
+	if nameString[0] == 'a' and nameString[1] == ' ':
 		return True
 
-	if nameString.contains(' to '):
+	if ' to ' in nameString:
 		return True
 
-	if nameString.contains(' in '):
+	if ' in ' in nameString:
 		return True
 
-	if nameString.contains(' of '):
-		return True	
+	if ' on ' in nameString:
+		return True
+
+	if ' of ' in nameString:
+		return True
 
 	return False
 

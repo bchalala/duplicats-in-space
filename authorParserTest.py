@@ -11,13 +11,12 @@ class AuthorTest(unittest.TestCase):
 		self.assertTrue(expectedString == aph.removeAccents(testString))
 		self.assertTrue(expectedString == aph.removeAccents2(testString))
 
-	def testRemove(self):
+	def testRemoveHappyPath(self):
 		testString1 = 'a~bla-|_  a,b-'
 		expectedString1 = 'abla a b'
-		print(aph.removeNonalphanum(testString1))
 		self.assertTrue(expectedString1 == aph.removeNonalphanum(testString1))
 
-	def testSpecialCase(self):
+	def testSpecialCaseHappyPath(self):
 		testString1 = 'John Smith iii'
 		testString2 = 'John Smith ii'
 		testString3 = 'John Smith iv'
@@ -26,7 +25,19 @@ class AuthorTest(unittest.TestCase):
 		self.assertTrue(expectedString == aph.SpecialCharCases(testString2))
 		self.assertTrue(expectedString == aph.SpecialCharCases(testString3))
 
-	def generateNamesWithInitials(self):
+	def testCheckMistakenNames(self):
+		self.assertTrue(aph.checkMistakenNames("he and me"))
+		self.assertTrue(aph.checkMistakenNames("for the glory of the south"))
+		self.assertTrue(aph.checkMistakenNames("trick or treat"))
+		self.assertTrue(aph.checkMistakenNames("a bottle of wine"))
+		self.assertFalse(aph.checkMistakenNames("arab"))
+		self.assertTrue(aph.checkMistakenNames("reach to the sky"))
+		self.assertTrue(aph.checkMistakenNames("turn on the TV"))
+		self.assertTrue(aph.checkMistakenNames("I'm in here"))
+		self.assertTrue(aph.checkMistakenNames("something of value"))
+
+
+	def generateNamesWithInitialsHappyPath(self):
 		testString = 'John Smith'
 		expectedString = 'J Smith'
 		self.assertTrue(expectedString == aph.SpecialCharCases(testString))

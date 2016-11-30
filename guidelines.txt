@@ -59,6 +59,11 @@ Recommend for each step we product a csv because:
 		1. Remove university and check
 		2. For each affiliation, add some possible aliases (this is definitely gonna take up a lot of spaces)
 
+	^^^ Actually this might not be right. I found counter cases.
+
+	cases when:
+		univ == university
+
 	deal with / remove the HTML tags, e.g.
 		<sup> textHere </sup>
 
@@ -72,7 +77,7 @@ Recommend for each step we product a csv because:
 
 	Unnecessary " character before the title sometimes. 
 
-	Check cases since it's pretty inconsitstent
+	Check cases since it's pretty inconsitstent (convert all to lower case)
 
 	strip white spaces
 
