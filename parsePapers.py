@@ -3,6 +3,8 @@
 
 import csv
 from unidecode import unidecode
+import prefixScan
+import re
 
 dataDirectory = "sampleData/"
 
@@ -115,7 +117,7 @@ def unifyAuthorDuplicates(authorDict):
     else:
         return unifyAuthorDuplicates(authorDict)
 
-
+'''
 testdict = {1: set([1]), 2: set([1, 2]), 3: set([3, 1])}
 unifyAuthorDuplicates(testdict)
 for item in testdict.keys():
@@ -130,10 +132,30 @@ pidToAuthor = getPaperAuthorsFromSet(dupIds)
 authorDict = authors()
 duplicateAuthors = set()
 
-# Get all Ids for a given duplicate paper name
-for name in dupNames:
-    paperIds = dupPaperDict[name]
+print("--- Duplicate Papers ---")
+for key, value in dupPaperDict.items():
+    print(key + ": " + ', '.join(value))
 
-print(dupPaperDict)
-print(dupNames)
-'''
+print("--- Paper Authors ---")
+minsup = 3
+minwidth = 6
+for paperID, authorList in pidToAuthor.items():
+    authorNames = []
+    sanitizedNames = []
+    for (authorId, authorName) in authorList:
+        authorNames.append(authorName)
+
+        # remove unnusual characters before pattern scan
+        sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
+        sanitizedNames.append(sanitizedName)
+
+    print(authorNames)
+
+    patterns = prefixScan.mine(sanitizedNames, minsup)
+    # ignore short patterns and turn lists into strings for readability
+    readablePatterns = []
+    for (pattern, support) in patterns:
+        if (len(pattern) >= minwidth):
+            readablePatterns.append(''.join(pattern))
+    print("- patterns: " + str(readablePatterns))
+
