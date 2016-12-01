@@ -221,7 +221,7 @@ def removeNonalphanum(nameString):
 	# This takes cares of asian names I think. 
 	# Need to check if this generates false positives
 	nameString = nameString.replace("-", "")
-	nameString = nameString.replace("\. ", " ")
+	# nameString = nameString.replace("\. ", " ")
 	nameString = nameString.replace("\.", " ")
 	nameString = nameString.replace("\?", " ")
 
@@ -247,7 +247,7 @@ def generateNamesWithInitials(nameString):
 	stringWithInitials = ''
 	while (index < numWords-1):
 		stringWithInitials += wordArray[index][0]
-		stringWithInitials += ' '
+		stringWithInitials += '. '
 		index += 1
 
 	stringWithInitials += wordArray[numWords-1]
@@ -263,14 +263,18 @@ def seperateInitials(nameString):
 	resultString = ""
 	for word in wordArray:
 		if word == word.upper():
-			resultString += ' '.join(word)
+			resultString += '. '.join(word)
+			## if all capitalized
+			if len(word) == len(nameString):
+				resultString += '.'
 		else:
 			# Need to append space if it's not the last
 			if resultString[-1] != ' ':
-				resultString += ' '
+				resultString += '. '
 
 			resultString += word
 
+	resultString = resultString.strip() # Get rid of the white spaces
 	return resultString
 
 def swapCharacterWithinNames(nameString, nameDict):
