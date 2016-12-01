@@ -108,3 +108,11 @@ Notice for each 1,2 and 3 steps we want to check for special characters as well 
 
 Feel free to critique, comment and add stuff here.
 
+****************************************************************************************
+Thought for wrappers
+****************************************************************************************
+For each row of author, we add another column that contains a list of possible nicknames that matches. If we use a hash table, these will be in the buckets
+
+Would think hash table makes the most sense here but I haven't really put 300MB of data into a hasbtable before so... I think the key would be Author names and value would be ID. It would be something non-injective
+
+Not sure how to go about it yet... 

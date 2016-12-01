@@ -37,10 +37,28 @@ class AuthorTest(unittest.TestCase):
 		self.assertTrue(aph.checkMistakenNames("something of value"))
 
 
-	def generateNamesWithInitialsHappyPath(self):
+	def testGenerateNamesWithInitialsHappyPath(self):
 		testString = 'John Smith'
 		expectedString = 'J Smith'
-		self.assertTrue(expectedString == aph.SpecialCharCases(testString))
+		self.assertTrue(expectedString == aph.generateNamesWithInitials(testString))
+
+	def testSeperateInitialsHappyCase(self):
+		testString1 = 'GW Bush'
+		expectedString1 = 'G W Bush'
+		testString2 = 'MLK'
+		expectedString2 = 'M L K'
+		self.assertTrue(expectedString1 == aph.seperateInitials(testString1))
+		self.assertTrue(expectedString2 == aph.seperateInitials(testString2))
+
+	def testSwapCharHappyCase(self):
+		testDict = {}
+		testDict['y'] = 'i'
+		testString = 'kelly'
+		expectedString = 'kelli'
+		self.assertTrue(expectedString == aph.swapCharacterWithinNames(testString, testDict))
+
+
+
 
 
 if __name__ == '__main__':

@@ -254,8 +254,36 @@ def generateNamesWithInitials(nameString):
 
 	return stringWithInitials
 
+def seperateInitials(nameString):
+	""" A function that seperate the names MK Martin to M K Martin. 
+	Here is each character in it's partial is in caps, then we assume it to be multiple initials
+	******Notice we should run this function before we are converting cases!!!"""
+	wordArray = nameString.split()
+	charList = []
+	resultString = ""
+	for word in wordArray:
+		if word == word.upper():
+			resultString += ' '.join(word)
+		else:
+			# Need to append space if it's not the last
+			if resultString[-1] != ' ':
+				resultString += ' '
 
+			resultString += word
 
+	return resultString
 
+def swapCharacterWithinNames(nameString, nameDict):
+	""" A function that replace the names with other characters based on a dictinary.
+	Here we could replace all the characters or just some. 
+	Right now it's just replacing all.
+	We need to discuss this function, it's using a dictionary right now because
+	I'm pretty sure the runtime would be huge if we try all """
+	for key in nameDict:
+		tempString = nameString.replace(key, nameDict[key])
+
+		if nameString != tempString: nameString = tempString 
+
+	return nameString
 
 
