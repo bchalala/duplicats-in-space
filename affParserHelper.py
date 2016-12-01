@@ -6,7 +6,7 @@ def getParents(affString):
 	orgArr1 = affString.split(';')
 	orgArr2 = affString.split('|')
 	orgArr3 = affString.split('/')
-
+	orgArray = []
 	orgArray.append(getParentsHelper(orgArr1))
 	orgArray.append(getParentsHelper(orgArr2))
 	orgArray.append(getParentsHelper(orgArr3))
@@ -63,7 +63,10 @@ def institutionAliasMapper(affString):
 			word = D[word]
 
 		newAffString += word
-
+		newAffString += ' ' # There might be multiple spaces, but we want to standardize it 
+	
+	newAffString = newAffString.strip()
+	# print(newAffString)
 	return newAffString
 
 def removeHTMLTags(affString):

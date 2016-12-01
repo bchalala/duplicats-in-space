@@ -27,12 +27,12 @@ class AffTest(unittest.TestCase):
 	def testInstitutionMapper(self):
 		testString = 'brown univ'
 		expectedString = 'brown university'
-		self.assertTrue(expectedString == aph.removeNonalphanum(testString))
+		self.assertTrue(expectedString == affp.institutionAliasMapper(testString))
 
 	def testRemoveTags(self):
 		testString = '<sup>stanford university</sup>'
 		expectedString = ' stanford university '
-		self.assertTrue(expectedString == aph.SpecialCharCases(testString))
+		self.assertTrue(expectedString == affp.removeHTMLTags(testString))
 
 
 if __name__ == '__main__':
