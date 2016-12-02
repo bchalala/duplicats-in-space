@@ -7,12 +7,12 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-dataDirectory = "dataRev2/"
+dataDirectory = "sampleData/"
 answerFileName = "answer.txt"
 
 # Prefixscan variables
 minsupport = 2
-highThreshold = .7
+highThreshold = .85
 lowThreshold = .4
 
 '''
@@ -100,7 +100,7 @@ def authorList():
 
             if curName == authorName:
                 if curId != authorId:
-                    print("found duplicate authors:")
+                    print("found exact duplicate authors:")
                     print("  " + curName + "(" + curId + ")")
                     print("  " + authorName + "(" + authorId + ")")
                     theList[curId].add(authorId)
@@ -131,30 +131,41 @@ def authorList():
                     matched.
         '''
 
+
         patterns = prefixScan.mine(prefixGroupNoID, minsupport)
+        patterns.sort(key=lambda x: len(x[0]))
+
         minPatternSize = highThreshold*len(prefixGroupNoID[0])
+        newPrefixGroup = set()
+        curPatternLength = minPatternSize
+
         for (pattern, support) in patterns:
-            if (len(pattern) >= minPatternSize):
+            patternLength = len(pattern)
+            if (patternLength >= minPatternSize):
+                if (patternLength != curPatternLength):
+                    curPatternLength = patternLength
+                    prefixGroupNoID = list(newPrefixGroup)
+
                 matchIds = []
                 high = False
                 for (authorName, authorId) in prefixGroupWithID:
                     if minPatternWithThreshold(pattern, highThreshold, authorName):
-                        matchIds.append((authorId, authorName))
                         high = True
 
                 if high:
                     for (authorName, authorId) in prefixGroupWithID:
                         if minPatternWithThreshold(pattern, lowThreshold, authorName):
                             matchIds.append((authorId, authorName))
+                            newPrefixGroup.add((authorId, authorName))
 
                 if len(matchIds) >= 2:
-                    print("found duplicate authors:")
+                    print("found duplicate authors by prefixScan:")
                     idset = set([x[0] for x in matchIds])
                     for (aid, name) in matchIds:
                         theList[aid] |= idset
                         print("  " + name + "(" + aid + ")")
 
-                if len(matchIds) == len(prefixGroupNoID):
+                if len(matchIds) >= len(prefixGroupNoID):
                     break
 
 
