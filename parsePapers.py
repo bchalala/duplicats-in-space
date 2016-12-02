@@ -8,6 +8,70 @@ import re
 
 dataDirectory = "sampleData/"
 
+def authorList():
+    # mapping of paper title to ids: {"paper title": [id1, id2], "other title": [id3]}
+    paperDict = papers()
+
+    authorDict = authors()
+    availableAuthorIds = authorDict.keys()
+
+    pidToAuthorIds = paperAuthors()
+    availablePaperIds = pidToAuthorIds.keys()
+
+    paperCount = 0
+    for paper, pidList in paperDict.items():
+        # build list of lists of ids, corresponding to duplicate papers
+        # [[id1, id2, id3], [id6]. [id5, id4]]
+        authorIdGroups = []
+        for pid in pidList:
+            if pid in availablePaperIds:
+                authorGroup = []
+                authorIds = pidToAuthorIds[pid]
+                for authorId in authorIds:
+                    # print(authorIds)
+                    if authorId in availableAuthorIds:
+                        authorGroup.append(authorDict[authorId])
+                authorIdGroups.append(authorGroup)
+
+        if paperCount < 10:
+            print(authorIdGroups)
+            paperCount += 1
+
+
+
+    # pidToAuthor = getPaperAuthorsFromSet(dupIds)
+
+    # # authorDict = authorsAsDict()
+    # # duplicateAuthors = set()
+
+    # print("--- Duplicate Papers ---")
+    # for key, value in dupPaperDict.items():
+    #     print(key + ": " + ', '.join(value))
+
+    # print("--- Paper Authors ---")
+    # minsup = 3
+    # minwidth = 6
+    # for paperID, authorList in pidToAuthor.items():
+    #     authorNames = []
+    #     sanitizedNames = []
+    #     for (authorId, authorName) in authorList:
+    #         authorNames.append(authorName)
+
+    #         # remove unnusual characters before pattern scan
+    #         sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
+    #         sanitizedNames.append(sanitizedName)
+
+    #     print(authorNames)
+
+    #     patterns = prefixScan.mine(sanitizedNames, minsup)
+    #     # ignore short patterns and turn lists into strings for readability
+    #     readablePatterns = []
+    #     for (pattern, support) in patterns:
+    #         if (len(pattern) >= minwidth):
+    #             readablePatterns.append(''.join(pattern))
+    #     print("- patterns: " + str(readablePatterns))
+
+
 ''' 
     This function will return the dictionary which contains only papers that are
     duplicates of others as a key and values are the duplicate paperIds. The fun
@@ -15,10 +79,10 @@ dataDirectory = "sampleData/"
 
     Ideally the duplicateId set will be used in the getNamesOfPapers function
 '''
-def matchingPaperIds():
+def papers():
     paperDict = dict()
-    duplicateNames = set()
-    duplicateIds = set()
+    # duplicateNames = set()
+    # duplicateIds = set()
 
 
     with open(dataDirectory + "Paper.csv") as csvfile:
@@ -27,24 +91,26 @@ def matchingPaperIds():
             title = row['Title']
             paperId = row['Id']
 
+            # TO DO: clean up paper title so duplicates are indexed the same
+
             if title is "":
                 continue   
             if title in paperDict:
                 paperDict[title].append(paperId)
-                duplicateNames.add(title)
+                # duplicateNames.add(title)
             else:
                 paperDict[title] = [paperId]
 
-    duplicateDict = dict()
+    # duplicateDict = dict()
 
-    for entry in duplicateNames:
-        duplicateDict[entry] = paperDict[entry]
-        for item in paperDict[entry]:
-            duplicateIds.add(int(item))
+    # for entry in duplicateNames:
+    #     duplicateDict[entry] = paperDict[entry]
+    #     for item in paperDict[entry]:
+    #         duplicateIds.add(int(item))
 
 
-    
-    return (duplicateDict, duplicateNames, duplicateIds)
+    # paperDict: {"paper title": [id1, id2], "other title": [id3]}
+    return paperDict
 
 
 
@@ -55,37 +121,44 @@ def matchingPaperIds():
     lowercase. 
 '''
 
-def getPaperAuthorsFromSet(paperIdSet):
-    pidToAuthor = dict()
+def paperAuthors():
+    pidToAuthorIds = dict()
 
     with open(dataDirectory + "PaperAuthor.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             paperId = row['PaperId']
             authorId = row['AuthorId']
-            authorName = unidecode(row['Name'])
-            authorName = authorName.lower()
-            if int(paperId) in paperIdSet:
-                if paperId in pidToAuthor:
-                    pidToAuthor[paperId].append((authorId, authorName))
-                else:
-                    pidToAuthor[paperId] = [(authorId, authorName)]
+            # ignore other fields?
+            # authorName = unidecode(row['Name'])
+            # authorName = authorName.lower()
+            if paperId in pidToAuthorIds:
+                pidToAuthorIds[paperId].append(authorId)
+            else:
+                pidToAuthorIds[paperId] = [authorId]
 
-    return pidToAuthor
+    return pidToAuthorIds
+
 
 '''
     Returns all authors with their id as their duplicate
 '''
 def authors():
-    authorToAuthorSet = dict()
+    aidToAuthor = dict()
 
     with open(dataDirectory + "Author.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            aId = int(row['Id'])
-            authorToAuthorSet[aId] = aId
+            authorName = row['Name']
+            authorAffiliation = row['Affiliation']
 
-    return authorToAuthorSet
+            # TO DO: clean up author name
+            # TO DO: clean up author affiliation
+
+            author = {"name": authorName, "affiliation": authorAffiliation}
+            aidToAuthor[row['Id']] = author
+
+    return aidToAuthor
 
 
 ''' 
@@ -126,36 +199,5 @@ for item in testdict.keys():
 
 
 ''' 
-(dupPaperDict, dupNames, dupIds) = matchingPaperIds()
-pidToAuthor = getPaperAuthorsFromSet(dupIds)
 
-authorDict = authors()
-duplicateAuthors = set()
-
-print("--- Duplicate Papers ---")
-for key, value in dupPaperDict.items():
-    print(key + ": " + ', '.join(value))
-
-print("--- Paper Authors ---")
-minsup = 3
-minwidth = 6
-for paperID, authorList in pidToAuthor.items():
-    authorNames = []
-    sanitizedNames = []
-    for (authorId, authorName) in authorList:
-        authorNames.append(authorName)
-
-        # remove unnusual characters before pattern scan
-        sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
-        sanitizedNames.append(sanitizedName)
-
-    print(authorNames)
-
-    patterns = prefixScan.mine(sanitizedNames, minsup)
-    # ignore short patterns and turn lists into strings for readability
-    readablePatterns = []
-    for (pattern, support) in patterns:
-        if (len(pattern) >= minwidth):
-            readablePatterns.append(''.join(pattern))
-    print("- patterns: " + str(readablePatterns))
-
+authorList()
