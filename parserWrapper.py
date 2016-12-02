@@ -25,7 +25,7 @@ frameSize = len(authorDataframe['Name'])
 while index < frameSize:
 
 	nameString = authorDataframe['Name'][index]
-	nameString = aph.removeAccents2(nameString)
+	nameString = aph.removeAccents(nameString)
 	nameString = aph.removeNonalphanum(nameString)
 	nameString = aph.SpecialCharCases(nameString)
 
@@ -55,7 +55,7 @@ frameSize = len(paperDataframe['Title'])
 while index < frameSize:
 
 	nameString = paperDataframe['Title'][index]
-	nameString = aph.removeAccents2(nameString)
+	nameString = aph.removeAccents(nameString)
 	## nameString = aph.removeNonalphanum(nameString) should we have this or no?
 	nameString = tph.removeQuotations(nameString)
 
@@ -75,11 +75,11 @@ frameSize = len(paperAuthorDataframe['Name'])
 while index < frameSize:
 
 	nameString = paperAuthorDataframe['Name'][index]
-	nameString = aph.removeAccents2(nameString)
+	nameString = aph.removeAccents(nameString)
 	nameString = aph.removeNonalphanum(nameString)
 	nameString = aph.SpecialCharCases(nameString)
 
-	nickname = apg.generateNamesWithInitials(nameString)
+	nickname = aph.generateNamesWithInitials(nameString)
 	paperAuthorDataframe['Nickname'] = nickname
 
 	nameDict = aph.nicknameMapping()
@@ -101,7 +101,7 @@ while index < frameSize:
 
 	affString = paperAuthorDataframe['Affiliation'][index]
 
-	affString = aph.removeAccents2(affString)
+	affString = aph.removeAccents(affString)
 	affString = affp.removeHTMLTags(affString)
 	affAlias = affp.getParents(affString)
 
