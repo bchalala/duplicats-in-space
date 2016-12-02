@@ -222,7 +222,7 @@ def removeNonalphanum(nameString):
 
 	# This takes cares of asian names I think. 
 	# Need to check if this generates false positives
-	nameString = nameString.replace("-", "")
+	nameString = nameString.replace("-", " ")
 	# nameString = nameString.replace("\. ", " ")
 	nameString = nameString.replace("\.", " ")
 	nameString = nameString.replace("\?", " ")
@@ -271,6 +271,8 @@ def separateInitials(nameString):
 				resultString += '.'
 		else:
 			# Need to append space if it's not the last
+			print("in separateInitials")
+			print(word)
 			if resultString[-1] != ' ':
 				resultString += '. '
 
@@ -297,5 +299,7 @@ def cleanUpName(dataToTranslate):
 	cleanedName = removeAccents(dataToTranslate)
 	cleanedName = removeNonalphanum(cleanedName)
 	cleanedName = SpecialCharCases(cleanedName)
-	cleanedName = separateInitials(cleanedName)
+	# Right now I am not separating initials, I don't know if its necessary for
+	# the prefix scan implementation.
+	#cleanedName = separateInitials(cleanedName)
 	return cleanedName.lower()

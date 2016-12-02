@@ -51,6 +51,6 @@ def copyFile(filename, Ids, inputDir, outputDir):
                     writer.writerow(row)
 
 
-papers, authors = buildSampleData(6000, dataDir, sampleDataDir)
+papers, authors = buildSampleData(24000, dataDir, sampleDataDir)
 print("number of papers copied: %d" % len(papers))
 print("number of authors copied: %d" % len(authors))

@@ -10,8 +10,8 @@ import authorParserHelper as aph
 dataDirectory = "sampleData/"
 
 ''' 
-    This function will return the dictionary which contains only papers that are
-    duplicates of others as a key and values are the duplicate paperIds. The fun
+    This function will return the dictionary which contains duplicate paper titles
+    as a key and values are the duplicate paperIds. The function
     will also return the names of the duplicate papers, and the set of duplicateIds
 
     Ideally the duplicateId set will be used in the getNamesOfPapers function
@@ -54,12 +54,11 @@ def matchingPaperIds():
 
 ''' 
     Given a paperIdSet, this function will attempt to get all of the authors
-    for the papers in the set of paperIdSet. Any strings that are not ascii
-    will be automatically converted to ascii. Additionally, they will be made
-    lowercase. 
+    for the papers in the set of paperIdSet. Authors must be in the set of all
+    authors. Author names are cleaned up using authorParserHelper.
 '''
 
-def getPaperAuthorsFromSet(paperIdSet):
+def getPaperAuthorsFromSet(paperIdSet, authorDict):
     pidToAuthor = dict()
 
     with open(dataDirectory + "PaperAuthor.csv") as csvfile:
@@ -68,7 +67,7 @@ def getPaperAuthorsFromSet(paperIdSet):
             paperId = row['PaperId']
             authorId = row['AuthorId']
             authorName = aph.cleanUpName(row['Name'])
-            if int(paperId) in paperIdSet:
+            if (int(paperId) in paperIdSet) and (int(authorId) in authorDict):
                 if paperId in pidToAuthor:
                     pidToAuthor[paperId].append((authorId, authorName))
                 else:
@@ -86,7 +85,7 @@ def authors():
         reader = csv.DictReader(csvfile)
         for row in reader:
             aId = int(row['Id'])
-            authorToAuthorSet[aId] = aId
+            authorToAuthorSet[aId] = set([int(aId)])
 
     return authorToAuthorSet
 
@@ -129,10 +128,10 @@ for item in testdict.keys():
 
 
 ''' 
-(dupPaperDict, dupNames, dupIds) = matchingPaperIds()
-pidToAuthor = getPaperAuthorsFromSet(dupIds)
-
 authorDict = authors()
+(dupPaperDict, dupNames, dupIds) = matchingPaperIds()
+pidToAuthor = getPaperAuthorsFromSet(dupIds, authorDict)
+
 duplicateAuthors = set()
 
 print("--- Duplicate Papers ---")
@@ -140,18 +139,22 @@ for key, value in dupPaperDict.items():
     print(key + ": " + ', '.join(value))
 
 print("--- Paper Authors ---")
-minsup = 3
-minwidth = 6
+minsup = 2
+minwidth = 8
+
+'''
 for paperID, authorList in pidToAuthor.items():
     authorNames = []
     sanitizedNames = []
     for (authorId, authorName) in authorList:
+
         authorNames.append(authorName)
 
         # remove unnusual characters before pattern scan
         sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
         sanitizedNames.append(sanitizedName)
 
+    print(paperID)
     print(authorNames)
 
     patterns = prefixScan.mine(sanitizedNames, minsup)
@@ -161,4 +164,84 @@ for paperID, authorList in pidToAuthor.items():
         if (len(pattern) >= minwidth):
             readablePatterns.append(''.join(pattern))
     print("- patterns: " + str(readablePatterns))
+'''
+
+for key, value in dupPaperDict.items():
+    authorNames = []
+    sanitizedNamesWithId = []
+    sanitizedNamesWithoutId = []
+    for paperId in value:
+        if paperId in pidToAuthor:
+            authorNames = authorNames + pidToAuthor[paperId]
+            for (authorId, authorName) in authorNames:
+                # remove unnusual characters before pattern scan
+                sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
+                sanitizedNamesWithId.append((sanitizedName, authorId))
+
+    # There may be problems with checking equality of names when they have
+    # all the spaces removed. This might be very occasional, but still.
+    
+    sanitizedNamesWithId.sort()
+    #print("sanitized with id")
+    #print(sanitizedNamesWithId)
+    #print("\n")
+
+    curId = -1
+    curName = ""
+    for (authorName, authorId) in sanitizedNamesWithId:
+        if curId == -1:
+            curId = authorId
+            curName = authorName
+            sanitizedNamesWithoutId.append(authorName)
+            continue
+
+        if curName == authorName:
+            if curId != authorId:
+                authorDict[int(curId)].add(int(authorId))
+                authorDict[int(authorId)].add(int(curId))
+                print("duplicate:")
+                print(curId)
+                print(authorId)
+        else:
+            sanitizedNamesWithoutId.append(authorName)
+            curId = authorId
+            curName = authorName
+
+
+    #print("sanitized without id")
+    #print(sanitizedNamesWithoutId)
+    #print("\n")
+
+    if len(sanitizedNamesWithoutId) <= 1:
+        continue
+    else:
+        print(key)
+        print("sanitized without id")
+        print(sanitizedNamesWithoutId)
+        #print("\n")
+
+
+    # Run prefixScan on names that are not equal to eachother.
+    patterns = prefixScan.mine(sanitizedNamesWithoutId, minsup)
+
+    readablePatterns = []
+    for (pattern, support) in patterns:
+        if (len(pattern) >= minwidth):
+            readablePatterns.append(''.join(pattern))
+    print("- patterns: " + str(readablePatterns))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
