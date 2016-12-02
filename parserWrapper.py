@@ -29,28 +29,26 @@ index = 0
 ## Adding new columns here
 
 print('Now processing author.csv...')
-authorDataframe['Nickname'] = 'NaN'
+# authorDataframe['Nickname'] = 'NaN'
 frameSize = len(authorDataframe['Name'])
 
 bar = Bar('Processing', max=frameSize)
 while index < frameSize:
 
 	nameString = authorDataframe['Name'][index]
+
+
 	nameString = aph.removeAccents(nameString)
 	nameString = aph.removeNonalphanum(nameString)
 	nameString = aph.SpecialCharCases(nameString)
 
-	nickname = aph.generateNamesWithInitials(nameString)
-	authorDataframe['Nickname'] = nickname
+	# nickname = aph.generateNamesWithInitials(nameString)
+	# authorDataframe['Nickname'] = nickname
 
 	nameDict = aph.nicknameMapping()
 
 	if nameString in nameDict:
 		nameString = nameDict[nameString]
-
-	if aph.checkMistakenNames(nameString):
-		index += 1
-		continue
 
 	authorDataframe['Name'][index] = nameString
 
@@ -72,10 +70,10 @@ bar = Bar('Processing', max=frameSize)
 
 while index < frameSize:
 
-	nameString = paperDataframe['Title'][index]
+	nameString = paperDataframe['Title'][index].replace('"', "")
 	nameString = aph.removeAccents(nameString)
 	## nameString = aph.removeNonalphanum(nameString) should we have this or no?
-	nameString = tph.removeQuotations(nameString)
+	# nameString = tph.removeQuotations(nameString)
 
 
 	paperDataframe['Title'][index] = nameString
@@ -91,7 +89,7 @@ bar.finish()
 print("Now processing paperAuthor.csv")
 print("Time used %s seconds " % (time.time() - start_time))
 
-paperAuthorDataframe['Nickname'] = 'NaN'
+#paperAuthorDataframe['Nickname'] = 'NaN'
 index = 0
 frameSize = len(paperAuthorDataframe['Name'])
 
@@ -99,26 +97,24 @@ bar = Bar('Processing', max=frameSize)
 while index < frameSize:
 
 	nameString = paperAuthorDataframe['Name'][index]
+
 	nameString = aph.removeAccents(nameString)
 	nameString = aph.removeNonalphanum(nameString)
 	nameString = aph.SpecialCharCases(nameString)
 
-	nickname = aph.generateNamesWithInitials(nameString)
-	paperAuthorDataframe['Nickname'] = nickname
+	#nickname = aph.generateNamesWithInitials(nameString)
+	#paperAuthorDataframe['Nickname'] = nickname
 
 	nameDict = aph.nicknameMapping()
 
 	if nameString in nameDict:
 		nameString = nameDict[nameString]
 
-	if aph.checkMistakenNames(nameString):
-		index += 1
-		continue
-
 	paperAuthorDataframe['Name'][index] = nameString
 
 	index += 1
 	bar.next()
+
 bar.finish()
 
 
@@ -130,6 +126,11 @@ while index < frameSize:
 
 	affString = paperAuthorDataframe['Affiliation'][index]
 
+	if affString.empty():
+		bar.next()
+		index += 1
+		continue
+
 	affString = aph.removeAccents(affString)
 	affString = affp.removeHTMLTags(affString)
 	affAlias = affp.getParents(affString)
@@ -137,6 +138,7 @@ while index < frameSize:
 	paperAuthorDataframe['AffAlias'] = affAlias
 
 	index += 1
+
 	bar.next()
 
 bar.finish()
