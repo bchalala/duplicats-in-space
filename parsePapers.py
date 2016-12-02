@@ -90,7 +90,9 @@ def authorList():
     answer = open(answerFileName, 'w')
     answer.truncate()
     answer.write("AuthorId,DuplicateAuthorIds\n")
-    for aId in theList.keys().sort()
+    intList = [int(x) for x in theList.keys()]
+    for aId in sorted(intList):
+        aId = str(aId)
         idList = theList[aId]
 
         answer.write(aId + ",")
