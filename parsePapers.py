@@ -7,7 +7,7 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-import pro
+
 dataDirectory = "dataRev2/"
 answerFileName = "answer.txt"
 
@@ -101,7 +101,7 @@ def authorList():
         curName = ""
 
         longNames = []
-        longLength = 13
+        longLength = 17
 
         for (authorName, authorId) in sanitizedNames:
             if curId == -1:
@@ -145,7 +145,7 @@ def authorList():
         longNameThreshold = .9
 
         for find in range(0, len(longNames)):
-            for sind in range(find + 1, len(longNames))
+            for sind in range(find + 1, len(longNames)):
                 (authorName1, authorId1) = longNames[find]
                 (authorName2, authorId2) = longNames[sind]
 
@@ -154,6 +154,9 @@ def authorList():
                     theList[authorId2],add(authorId1)
                     prefixGroupWithID.remove((authorName1, authorId1))
                     prefixGroupNoID.remove(authorName1)
+                    print("pruned and unified long name:")
+                    print("  " + authorName1 + "(" + authorId1 + ")")
+                    print("  " + authorName2 + "(" + authorId2 + ")")
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
@@ -195,11 +198,11 @@ def authorList():
                             newPrefixGroup.add((authorId, authorName))
 
                 if len(matchIds) >= 2:
-                    print("found duplicate authors by prefixScan:")
+                    #print("found duplicate authors by prefixScan:")
                     idset = set([x[0] for x in matchIds])
                     for (aid, name) in matchIds:
                         theList[aid] |= idset
-                        print("  " + name + "(" + aid + ")")
+                        #print("  " + name + "(" + aid + ")")
 
                 if len(matchIds) >= len(prefixGroupNoID):
                     break
@@ -404,10 +407,13 @@ def isNameInOther(name1, name2, threshold):
     cntMatch = 0
     bi = 0
 
-    for si in range(0, len(smallerName)):
-        if biggerName[bi] == smallerName[si]:
-            cntMatch++
-            bi++
+    for bi in range(0, len(biggerName)):        
+        if smallerName[si] == biggerName[bi]:
+            si += 1
+            cntMatch += 1
+
+            if si >= len(smallerName):
+                break
 
 
     if (cntMatch/len(biggerName)) > threshold:
