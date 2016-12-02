@@ -5,6 +5,7 @@ import csv
 from unidecode import unidecode
 import prefixScan
 import re
+import authorParserHelper as aph
 
 dataDirectory = "dataRev2/"
 answerFileName = "answer.txt"
@@ -169,11 +170,9 @@ def authors():
     with open(dataDirectory + "Author.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            authorName = row['Name']
+            authorName = aph.cleanUpName(row['Name'])
             authorAffiliation = row['Affiliation']
 
-            # TO DO: clean up author name
-            # authorName = cleanedName(authorName)
             # TO DO: clean up author affiliation
             # authorAffiliation = cleanedAffiliation(authorAffiliation)
 

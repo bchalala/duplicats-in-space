@@ -291,3 +291,11 @@ def swapCharacterWithinNames(nameString, nameDict):
 	return nameString
 
 
+def cleanUpName(dataToTranslate):
+	cleanedName = removeAccents(dataToTranslate)
+	cleanedName = removeNonalphanum(cleanedName)
+	cleanedName = SpecialCharCases(cleanedName)
+	# Right now I am not separating initials, I don't know if its necessary for
+	# the prefix scan implementation.
+	#cleanedName = separateInitials(cleanedName)
+	return cleanedName.lower()
