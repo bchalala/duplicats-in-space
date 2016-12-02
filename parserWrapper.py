@@ -30,32 +30,32 @@ index = 0
 
 print('Now processing author.csv...')
 # authorDataframe['Nickname'] = 'NaN'
-# frameSize = len(authorDataframe['Name'])
+frameSize = len(authorDataframe['Name'])
 
-# bar = Bar('Processing', max=frameSize)
-# while index < frameSize:
+bar = Bar('Processing', max=frameSize)
+while index < frameSize:
 
-# 	nameString = authorDataframe['Name'][index]
+	nameString = authorDataframe['Name'][index]
 
 
-# 	nameString = aph.removeAccents(nameString)
-# 	nameString = aph.removeNonalphanum(nameString)
-# 	nameString = aph.SpecialCharCases(nameString)
+	nameString = aph.removeAccents(nameString)
+	nameString = aph.removeNonalphanum(nameString)
+	nameString = aph.SpecialCharCases(nameString)
 
-# 	# nickname = aph.generateNamesWithInitials(nameString)
-# 	# authorDataframe['Nickname'] = nickname
+	# nickname = aph.generateNamesWithInitials(nameString)
+	# authorDataframe['Nickname'] = nickname
 
-# 	nameDict = aph.nicknameMapping()
+	nameDict = aph.nicknameMapping()
 
-# 	if nameString in nameDict:
-# 		nameString = nameDict[nameString]
+	if nameString in nameDict:
+		nameString = nameDict[nameString]
 
-# 	authorDataframe['Name'][index] = nameString
+	authorDataframe['Name'][index] = nameString
 
-# 	index += 1
-# 	bar.next()
+	index += 1
+	bar.next()
 
-# bar.finish()
+bar.finish()
 
 ##########################################
 ## This part we clean up the paper file  #

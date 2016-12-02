@@ -7,6 +7,7 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
+import pro
 dataDirectory = "dataRev2/"
 answerFileName = "answer.txt"
 
@@ -14,6 +15,10 @@ answerFileName = "answer.txt"
 minsupport = 2
 highThreshold = .85
 lowThreshold = .4
+
+
+from progress.bar import Bar
+
 
 '''
 Everything we've got.
@@ -37,6 +42,11 @@ def authorList():
 
     paperCount = 0
     print("comparing authors...")
+
+    frameSize = len(paperDict)
+
+    bar = Bar('Processing...', max=frameSize)
+
     for paper, pidList in paperDict.items():
         # opt: if we only compare names between duplicate papers, we can skip papers without duplicates
         if len(pidList) < 2:
@@ -193,7 +203,10 @@ def authorList():
                                 theList[aId].add(bId)
                                 theList[bId].add(aId)
         '''
+        bar.next()
 
+
+    bar.finish()
         
 
 
