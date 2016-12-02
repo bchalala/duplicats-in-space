@@ -139,7 +139,6 @@ def authorList():
                 high = False
                 for (authorName, authorId) in prefixGroupWithID:
                     if minPatternWithThreshold(pattern, highThreshold, authorName):
-                        matchIds.append((authorId, authorName))
                         high = True
 
                 if high:
@@ -154,7 +153,7 @@ def authorList():
                         theList[aid] |= idset
                         print("  " + name + "(" + aid + ")")
 
-                if len(matchIds) == len(prefixGroupNoID):
+                if len(matchIds) >= len(prefixGroupNoID):
                     break
 
 
