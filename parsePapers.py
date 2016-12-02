@@ -7,9 +7,13 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-dataDirectory = "sampleData/"
+dataDirectory = "dataRev2/"
 answerFileName = "answer.txt"
+
+# Prefixscan variables
 minsupport = 2
+highThreshold = .7
+lowThreshold = .4
 
 '''
 Everything we've got.
@@ -67,7 +71,8 @@ def authorList():
             add any duplicate ids to theList, get unique patterns
         '''
 
-        prefixGroup = []
+        prefixGroupWithID = []
+        prefixGroupNoID = []
         sanitizedNames = []
 
 
@@ -89,7 +94,8 @@ def authorList():
             if curId == -1:
                 curId = authorId
                 curName = authorName
-                prefixGroup.append((authorName, authorId))
+                prefixGroupWithID.append((authorName, authorId))
+                prefixGroupNoID.append(authorName)
                 continue
 
             if curName == authorName:
@@ -100,17 +106,56 @@ def authorList():
                     theList[curId].add(authorId)
                     theList[authorId].add(curId)
             else:
-                prefixGroup.append((authorName, authorId))
+                prefixGroupWithID.append((authorName, authorId))
+                prefixGroupNoID.append(authorName)
                 curId = authorId
                 curName = authorName
 
-        print(authorIdGroups)
-        print(prefixGroup)
+
+        # If the list is a single element or less, then no need to compare.
+        if len(prefixGroupWithID) <= 1:
+            continue
+
+        prefixGroupNoID.sort(key=len)
+        print(prefixGroupNoID)
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
+        '''
+            Gets all patterns using prefixscan algorithm. Then goes through and checks to see
+            if each pattern meets the high threshold for any item, and if it does, it goes through
+            the list again and tries the pattern against names with the lower threshold. If the list
+            of names which satisfied the threshold is longer than 2, it adds them to theList
 
+            #TODO   Fix behavior where it will keep matching prefixes even if names have already been
+                    matched.
+        '''
 
+        patterns = prefixScan.mine(prefixGroupNoID, minsupport)
+        minPatternSize = highThreshold*len(prefixGroupNoID[0])
+        for (pattern, support) in patterns:
+            if (len(pattern) >= minPatternSize):
+                matchIds = []
+                high = False
+                for (authorName, authorId) in prefixGroupWithID:
+                    if minPatternWithThreshold(pattern, highThreshold, authorName):
+                        matchIds.append((authorId, authorName))
+                        high = True
+
+                if high:
+                    for (authorName, authorId) in prefixGroupWithID:
+                        if minPatternWithThreshold(pattern, lowThreshold, authorName):
+                            matchIds.append((authorId, authorName))
+
+                if len(matchIds) >= 2:
+                    print("found duplicate authors:")
+                    idset = set([x[0] for x in matchIds])
+                    for (aid, name) in matchIds:
+                        theList[aid] |= idset
+                        print("  " + name + "(" + aid + ")")
+
+                if len(matchIds) == len(prefixGroupNoID):
+                    break
 
 
         '''
@@ -262,6 +307,33 @@ def authorsToAuthors(authorIds):
         idsToIds[aId] = a
     return idsToIds
 
+
+def minPatternWithThreshold(pattern, threshold, name):
+
+    pattern = [x[0] for x in pattern]
+    namelen = len(name)
+    patternlen = len(pattern)
+
+    if namelen == 0:
+        return False
+
+    # Pattern must be within threshold
+    percentage = patternlen/namelen
+    if percentage < threshold or percentage > 1:
+        return False
+
+    curChar = 0
+    for i in range(0, len(name)):
+        if curChar >= patternlen:
+            return True
+
+        if name[i] == pattern[curChar]:
+            curChar += 1
+
+    if curChar >= patternlen:
+        return True
+
+    return False
 
 ''' 
     This function will go through each author's duplicate set and take the union of
