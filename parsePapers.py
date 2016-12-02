@@ -390,21 +390,23 @@ def unifyAuthorDuplicates(authorDict):
 
 def isNameInOther(name1, name2, threshold):
 
+    if len(smallerName)/len(biggerName) < threshold:
+        return False
+
     if len(name1) > len(name2): 
         smallerName = name2
         biggerName = name1
     else:
         smallerName = name1
         biggerName = name2
-
-
+    
     cntMatch = 0
-    si = 0
+    bi = 0
 
-    for bi in range(0, len(biggerName)):
-        if smallerName[si] == name2[bi]:
-            snIndex++
-            si++
+    for si in range(0, len(smallerName)):
+        if biggerName[bi] == smallerName[si]:
+            cntMatch++
+            bi++
 
 
     if (cntMatch/len(biggerName)) > threshold:
