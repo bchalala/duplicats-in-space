@@ -7,7 +7,7 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-dataDirectory = "sampleData/"
+dataDirectory = "dataRev2/"
 
 ''' 
     This function will return the dictionary which contains duplicate paper titles
@@ -141,30 +141,6 @@ for key, value in dupPaperDict.items():
 print("--- Paper Authors ---")
 minsup = 2
 minwidth = 8
-
-'''
-for paperID, authorList in pidToAuthor.items():
-    authorNames = []
-    sanitizedNames = []
-    for (authorId, authorName) in authorList:
-
-        authorNames.append(authorName)
-
-        # remove unnusual characters before pattern scan
-        sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', authorName)
-        sanitizedNames.append(sanitizedName)
-
-    print(paperID)
-    print(authorNames)
-
-    patterns = prefixScan.mine(sanitizedNames, minsup)
-    # ignore short patterns and turn lists into strings for readability
-    readablePatterns = []
-    for (pattern, support) in patterns:
-        if (len(pattern) >= minwidth):
-            readablePatterns.append(''.join(pattern))
-    print("- patterns: " + str(readablePatterns))
-'''
 
 for key, value in dupPaperDict.items():
     authorNames = []
