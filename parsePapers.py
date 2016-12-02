@@ -100,10 +100,15 @@ def authorList():
         curId = -1
         curName = ""
 
+        longNames = []
+        longLength = 13
+
         for (authorName, authorId) in sanitizedNames:
             if curId == -1:
                 curId = authorId
                 curName = authorName
+                if len(authorName) > longLength:
+                    longNames.append((authorName, authorId))
                 prefixGroupWithID.append((authorName, authorId))
                 prefixGroupNoID.append(authorName)
                 continue
@@ -116,6 +121,8 @@ def authorList():
                     theList[curId].add(authorId)
                     theList[authorId].add(curId)
             else:
+                if len(authorName) > longLength:
+                    longNames.append((authorName, authorId))
                 prefixGroupWithID.append((authorName, authorId))
                 prefixGroupNoID.append(authorName)
                 curId = authorId
@@ -125,9 +132,28 @@ def authorList():
         # If the list is a single element or less, then no need to compare.
         if len(prefixGroupWithID) <= 1:
             continue
+        else:
+            prefixGroupNoID.sort(key=len)
 
-        prefixGroupNoID.sort(key=len)
-        #print(prefixGroupNoID)
+        # Step 2.7
+        '''
+            If names are really long, then prefix scan takes an insane amount of time. Names that are bigger
+            than some n (tentatively 13) characters will be checked against other long names to ensure prefix
+            scan doesn't take forever. 
+        '''
+
+        longNameThreshold = .9
+
+        for find in range(0, len(longNames)):
+            for sind in range(find + 1, len(longNames))
+                (authorName1, authorId1) = longNames[find]
+                (authorName2, authorId2) = longNames[sind]
+
+                if isNameInOther(authorName1, authorName2, longNameThreshold):
+                    theList[authorId1].add(authorId2)
+                    theList[authorId2],add(authorId1)
+                    prefixGroupWithID.remove((authorName1, authorId1))
+                    prefixGroupNoID.remove(authorName1)
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
@@ -178,35 +204,10 @@ def authorList():
                 if len(matchIds) >= len(prefixGroupNoID):
                     break
 
-
-        '''
-        for pIndex in range(0, len(authorIdGroups)):
-            otherAuthors = authorIdGroups[0:pIndex] + authorIdGroups[pIndex+1:len(pidList)]
-            for authorA in authorIdGroups[pIndex]:
-                aId = authorA['id']
-
-                for authorGroup in otherAuthors:
-                    for authorB in authorGroup:
-                        bId = authorB['id']
-                        if aId == bId:
-                            continue
-
-                        # TO DO: compare authors (maybe check if they both follow a pattern)
-                        # if authorsLookLikeDuplicates(authorA, authorB):
-                        if authorA['name'][0:6].lower() == authorB['name'][0:6].lower():
-
-                            if aId not in theList[bId]:
-                                print("found duplicate authors:")
-                                print("  " + authorA['name'] + "(" + authorA['id'] + ")")
-                                print("  " + authorB['name'] + "(" + authorB['id'] + ")")
-                                # mark as duplicates
-                                theList[aId].add(bId)
-                                theList[bId].add(aId)
-        '''
         bar.next()
 
-
     bar.finish()
+
         
 
 
