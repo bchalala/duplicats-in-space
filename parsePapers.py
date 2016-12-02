@@ -86,6 +86,10 @@ def authorList():
                                 theList[bId].add(aId)
 
     # Step 4
+    # union lists of duplicates
+    theList = unifyAuthorDuplicates(theList)
+
+    # Step 5
     # Output results
     print("writing results to " + answerFileName + "...")
     answer = open(answerFileName, 'w')
@@ -203,6 +207,34 @@ def authorsToAuthors(authorIds):
         idsToIds[aId] = a
     return idsToIds
 
+
+''' 
+    This function will go through each author's duplicate set and take the union of
+    the current author's duplicates and each item in the duplicate set's duplicates.
+    If there are no changes detected after the process, we are finished. Otherwise,
+    we do it again.
+'''
+def unifyAuthorDuplicates(authorDict):
+
+    change = False
+    authors = authorDict.keys()
+
+    for authorId in authors:
+        duplicates = authorDict[authorId]
+        newDups = duplicates
+        for dup in duplicates:
+            if authorDict[dup] != newDups:
+                newDups = newDups.union(authorDict[dup])
+                authorDict[dup] = newDups
+                change = True
+
+        if newDups != duplicates:
+            authorDict[authorId] = newDups
+
+    if change is False:
+        return authorDict
+    else:
+        return unifyAuthorDuplicates(authorDict)
 
 
 authorList()
