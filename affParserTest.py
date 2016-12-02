@@ -31,7 +31,7 @@ class AffTest(unittest.TestCase):
 
 	def testRemoveTags(self):
 		testString = '<sup>stanford university</sup>'
-		expectedString = ' stanford university '
+		expectedString = 'stanford university'
 		self.assertTrue(expectedString == affp.removeHTMLTags(testString))
 
 

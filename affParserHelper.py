@@ -73,8 +73,8 @@ def removeHTMLTags(affString):
 	""" Removing the HTML tags from the string. Notice this replaces the tag with white spaces. 
 		So we have to run this before the squashing white spaces functionalities """
 
-	affString = affString.replace('<sup>', ' ')
-	affString = affString.replace('</sup>', ' ')
+	affString = affString.replace('<sup>', '')
+	affString = affString.replace('</sup>', '')
 
 	return affString
 

@@ -5,10 +5,14 @@ import re # For checkMistakeNames function
 def removeAccents(dataToTranslate):
 	"""Two function to remove accents, either one should work.
 	This is for testing which one runs faster.	"""
+	dataToTranslate = str(dataToTranslate)
+
 	return unicodedata.normalize('NFD', 
 		dataToTranslate).encode('ASCII', 'ignore').decode("utf-8")
 
 def removeAccents2(dataToTranslate):
+
+	dataToTranslate = str(dataToTranslate)
 	"""Two function to remove accents, either one should work.
 	This is for testing which one runs faster.	"""
 	return ''.join((c for c in 
