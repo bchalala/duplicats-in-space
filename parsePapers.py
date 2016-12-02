@@ -6,10 +6,13 @@ from unidecode import unidecode
 import prefixScan
 import re
 
-dataDirectory = "sampleData/"
+dataDirectory = "dataRev2/"
+answerFileName = "answer.txt"
 
 def authorList():
-    # mapping of paper title to ids: {"paper title": [id1, id2], "other title": [id3]}
+    # Step 1
+    # find duplicate papers by
+    # mapping paper title to ids: {"paper title": [id1, id2], "other title": [id3]}
     paperDict = papers()
 
     authorDict = authors()
@@ -18,26 +21,87 @@ def authorList():
     pidToAuthorIds = paperAuthors()
     availablePaperIds = pidToAuthorIds.keys()
 
+    theList = authorsToAuthors(availableAuthorIds)
+
     paperCount = 0
     for paper, pidList in paperDict.items():
-        # build list of lists of ids, corresponding to duplicate papers
-        # [[id1, id2, id3], [id6]. [id5, id4]]
+        # opt: if we only compare names between duplicate papers, we can skip papers without duplicates
+        if len(pidList) < 2:
+            continue
+
+        # Step 2
+        # build list of lists of authors for a paper, corresponding to authors of each of its duplicates
         authorIdGroups = []
+
         for pid in pidList:
             if pid in availablePaperIds:
                 authorGroup = []
                 authorIds = pidToAuthorIds[pid]
                 for authorId in authorIds:
-                    # print(authorIds)
                     if authorId in availableAuthorIds:
                         authorGroup.append(authorDict[authorId])
                 authorIdGroups.append(authorGroup)
 
-        if paperCount < 10:
-            print(authorIdGroups)
-            paperCount += 1
 
+        # authorIdGroups looks like:
+        '''
+        [[{'name': 'Donald J. Wuebbles', 'affiliation': 'University of Illinois Urbana Champaign'}], []]
+        [[], []]
+        [[{'name': 'Edward A. Panacek', 'affiliation': 'University of California Davis'}], []]
+        [[{'name': 'Claudio Nicolini', 'affiliation': ''}], []]
+        [[{'affiliation': 'University of Pittsburgh', 'name': 'Kirk R. Pruhs'}], [{'affiliation': '', 'name': 'Peter P. Groumpos'}]]
+        '''
 
+        # Step 3
+        # compare authors
+        for pIndex in range(0, len(authorIdGroups)):
+            otherAuthors = authorIdGroups[0:pIndex] + authorIdGroups[pIndex+1:len(pidList)]
+            for authorA in authorIdGroups[pIndex]:
+                aId = authorA['id']
+
+                for authorGroup in otherAuthors:
+                    for authorB in authorGroup:
+                        bId = authorB['id']
+
+                        if aId == bId:
+                            continue
+
+                        # TO DO: compare authors
+                        # if compareAuthors(authorA, authorB):
+                        if authorA['name'][0:6].lower() == authorB['name'][0:6].lower():
+
+                            print("found duplicate authors: ")
+                            print("  " + authorA['name'] + "(" + authorA['id'] + ")")
+                            print("  " + authorB['name'] + "(" + authorB['id'] + ")")
+                            # mark as duplicates
+                            theList[aId].add(bId)
+                            theList[bId].add(aId)
+
+    # Step 4
+    # Output results
+    answer = open(answerFileName, 'w')
+    answer.truncate()
+    answer.write("AuthorId,DuplicateAuthorIds\n")
+    for aId, idList in theList.items():
+        answer.write(aId + ",")
+        first = True
+        for bId in idList:
+            if first:
+                first = False
+            else:
+                answer.write(" ")
+            answer.write(bId)
+        answer.write("\n")
+    answer.close()
+
+    # for authorId in duplicateAuthors.keys():
+    #     print(authorId)
+    #     print(duplicateAuthors[authorId])
+    # print("--- unifying ---")
+    # unifyAuthorDuplicates(duplicateAuthors)
+    # for authorId in duplicateAuthors.keys():
+    #     print(authorId)
+    #     print(duplicateAuthors[authorId])
 
     # pidToAuthor = getPaperAuthorsFromSet(dupIds)
 
@@ -155,11 +219,19 @@ def authors():
             # TO DO: clean up author name
             # TO DO: clean up author affiliation
 
-            author = {"name": authorName, "affiliation": authorAffiliation}
-            aidToAuthor[row['Id']] = author
+            authorId = row['Id']
+            author = {"name": authorName, "affiliation": authorAffiliation, "id": authorId}
+            aidToAuthor[authorId] = author
 
     return aidToAuthor
 
+def authorsToAuthors(authorIds):
+    idsToIds = dict()
+    for aId in authorIds:
+        a = set()
+        a.add(aId)
+        idsToIds[aId] = a
+    return idsToIds
 
 ''' 
     This function will go through each author's duplicate set and take the union of
