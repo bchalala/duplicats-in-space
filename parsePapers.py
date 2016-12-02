@@ -7,7 +7,7 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-dataDirectory = "sampleData/"
+dataDirectory = "dataRev2/"
 answerFileName = "answer.txt"
 
 # Prefixscan variables
@@ -100,9 +100,9 @@ def authorList():
 
             if curName == authorName:
                 if curId != authorId:
-                    print("found exact duplicate authors:")
-                    print("  " + curName + "(" + curId + ")")
-                    print("  " + authorName + "(" + authorId + ")")
+                    #print("found exact duplicate authors:")
+                    #print("  " + curName + "(" + curId + ")")
+                    #print("  " + authorName + "(" + authorId + ")")
                     theList[curId].add(authorId)
                     theList[authorId].add(curId)
             else:
@@ -117,7 +117,7 @@ def authorList():
             continue
 
         prefixGroupNoID.sort(key=len)
-        print(prefixGroupNoID)
+        #print(prefixGroupNoID)
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
