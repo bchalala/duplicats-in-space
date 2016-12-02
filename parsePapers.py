@@ -101,7 +101,7 @@ def authorList():
         curName = ""
 
         longNames = []
-        longLength = 17
+        longLength = 13
 
         for (authorName, authorId) in sanitizedNames:
             if curId == -1:
@@ -151,7 +151,7 @@ def authorList():
 
                 if isNameInOther(authorName1, authorName2, longNameThreshold):
                     theList[authorId1].add(authorId2)
-                    theList[authorId2],add(authorId1)
+                    theList[authorId2].add(authorId1)
                     prefixGroupWithID.remove((authorName1, authorId1))
                     prefixGroupNoID.remove(authorName1)
                     print("pruned and unified long name:")
@@ -394,18 +394,19 @@ def unifyAuthorDuplicates(authorDict):
 
 def isNameInOther(name1, name2, threshold):
 
-    if len(smallerName)/len(biggerName) < threshold:
-        return False
-
+    
     if len(name1) > len(name2): 
         smallerName = name2
         biggerName = name1
     else:
         smallerName = name1
         biggerName = name2
+
+    if len(smallerName)/len(biggerName) < threshold:
+        return False
     
     cntMatch = 0
-    bi = 0
+    si = 0
 
     for bi in range(0, len(biggerName)):        
         if smallerName[si] == biggerName[bi]:
