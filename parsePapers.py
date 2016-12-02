@@ -7,8 +7,9 @@ import prefixScan
 import re
 import authorParserHelper as aph
 
-dataDirectory = "dataRev2/"
+dataDirectory = "sampleData/"
 answerFileName = "answer.txt"
+minsupport = 2
 
 '''
 Everything we've got.
@@ -67,10 +68,10 @@ def authorList():
         '''
 
         prefixGroup = []
+        sanitizedNames = []
+
 
         for group in authorIdGroups:
-            sanitizedNames = []
-            sanitizedNamesWithIdNoDuplicates = []
             for author in group:
                 sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', author['name'])
                 sanitizedNames.append((sanitizedName, author['id']))
@@ -80,35 +81,37 @@ def authorList():
             # all the spaces removed. This might be very occasional, but still.
             # e.g. Bobb G Reen or Bobb Green (meh)
             
-            sanitizedNames.sort()
-            curId = -1
-            curName = ""
+        sanitizedNames.sort()
+        curId = -1
+        curName = ""
 
-            for (authorName, authorId) in sanitizedNames:
-                if curId == -1:
-                    curId = authorId
-                    curName = authorName
-                    sanitizedNamesWithIdNoDuplicates.append((authorName, authorId))
-                    continue
+        for (authorName, authorId) in sanitizedNames:
+            if curId == -1:
+                curId = authorId
+                curName = authorName
+                prefixGroup.append((authorName, authorId))
+                continue
 
-                if curName == authorName:
-                    if curId != authorId:
-                        print("found duplicate authors:")
-                        print("  " + curName + "(" + curId + ")")
-                        print("  " + authorName + "(" + authorId + ")")
-                        theList[curId].add(authorId)
-                        theList[authorId].add(curId)
-                else:
-                    sanitizedNamesWithIdNoDuplicates.append((authorName, authorId))
-                    curId = authorId
-                    curName = authorName
+            if curName == authorName:
+                if curId != authorId:
+                    print("found duplicate authors:")
+                    print("  " + curName + "(" + curId + ")")
+                    print("  " + authorName + "(" + authorId + ")")
+                    theList[curId].add(authorId)
+                    theList[authorId].add(curId)
+            else:
+                prefixGroup.append((authorName, authorId))
+                curId = authorId
+                curName = authorName
 
-            prefixGroup.append(sanitizedNamesWithIdNoDuplicates)
-
-
+        print(authorIdGroups)
+        print(prefixGroup)
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
+
+
+
 
         '''
         for pIndex in range(0, len(authorIdGroups)):
@@ -134,6 +137,9 @@ def authorList():
                                 theList[aId].add(bId)
                                 theList[bId].add(aId)
         '''
+
+        
+
 
     # Step 4
     # union lists of duplicates
@@ -175,11 +181,10 @@ def papers():
     with open(dataDirectory + "Paper.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            title = row['Title']
-            paperId = row['Id']
 
-            # TO DO: clean up paper title so duplicates are indexed the same
-            # title = cleanedTitle(title)
+            # TODO: Ensure that the cleanUpTitle is thorough
+            title = aph.cleanUpTitle(row['Title'])
+            paperId = row['Id']
 
             if title is "":
                 continue   

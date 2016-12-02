@@ -224,7 +224,7 @@ def removeNonalphanum(nameString):
 
 	# This takes cares of asian names I think. 
 	# Need to check if this generates false positives
-	nameString = nameString.replace("-", "")
+	nameString = nameString.replace("-", " ")
 	# nameString = nameString.replace("\. ", " ")
 	nameString = nameString.replace("\.", " ")
 	nameString = nameString.replace("\?", " ")
@@ -303,3 +303,8 @@ def cleanUpName(dataToTranslate):
 	# the prefix scan implementation.
 	#cleanedName = separateInitials(cleanedName)
 	return cleanedName.lower()
+
+def cleanUpTitle(title):
+	title = removeAccents(title)
+	title = removeNonalphanum(title)
+	return title
