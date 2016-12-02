@@ -50,7 +50,6 @@ def authorList():
                         authorGroup.append(authorDict[authorId])
                 authorIdGroups.append(authorGroup)
 
-
         # authorIdGroups looks like:
         '''
         [[{'name': 'Donald J. Wuebbles', 'affiliation': 'University of Illinois Urbana Champaign'}], []]
@@ -60,8 +59,58 @@ def authorList():
         [[{'affiliation': 'University of Pittsburgh', 'name': 'Kirk R. Pruhs'}], [{'affiliation': '', 'name': 'Peter P. Groumpos'}]]
         '''
 
+
+        # Step 2.5
+        '''
+            Build the list of names to mine prefix patterns from, remove duplicate names, 
+            add any duplicate ids to theList, get unique patterns
+        '''
+
+        prefixGroup = []
+
+        for group in authorIdGroups:
+            sanitizedNames = []
+            sanitizedNamesWithIdNoDuplicates = []
+            for author in group:
+                sanitizedName = re.sub(r"[^a-zA-Z0-9]", '', author['name'])
+                sanitizedNames.append((sanitizedName, author['id']))
+
+
+            # There may be problems with checking equality of names when they have
+            # all the spaces removed. This might be very occasional, but still.
+            # e.g. Bobb G Reen or Bobb Green (meh)
+            
+            sanitizedNames.sort()
+            curId = -1
+            curName = ""
+
+            for (authorName, authorId) in sanitizedNames:
+                if curId == -1:
+                    curId = authorId
+                    curName = authorName
+                    sanitizedNamesWithIdNoDuplicates.append((authorName, authorId))
+                    continue
+
+                if curName == authorName:
+                    if curId != authorId:
+                        print("found duplicate authors:")
+                        print("  " + curName + "(" + curId + ")")
+                        print("  " + authorName + "(" + authorId + ")")
+                        theList[curId].add(authorId)
+                        theList[authorId].add(curId)
+                else:
+                    sanitizedNamesWithIdNoDuplicates.append((authorName, authorId))
+                    curId = authorId
+                    curName = authorName
+
+            prefixGroup.append(sanitizedNamesWithIdNoDuplicates)
+
+
+
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
+
+        '''
         for pIndex in range(0, len(authorIdGroups)):
             otherAuthors = authorIdGroups[0:pIndex] + authorIdGroups[pIndex+1:len(pidList)]
             for authorA in authorIdGroups[pIndex]:
@@ -84,6 +133,7 @@ def authorList():
                                 # mark as duplicates
                                 theList[aId].add(bId)
                                 theList[bId].add(aId)
+        '''
 
     # Step 4
     # union lists of duplicates
