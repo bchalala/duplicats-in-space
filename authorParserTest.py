@@ -42,14 +42,14 @@ class AuthorTest(unittest.TestCase):
 		expectedString = 'J. Smith'
 		self.assertTrue(expectedString == aph.generateNamesWithInitials(testString))
 
-	def testSeperateInitialsHappyCase(self):
+	def testSeparateInitialsHappyCase(self):
 		testString1 = 'GW Bush'
 		expectedString1 = 'G. W. Bush'
 		testString2 = 'MLK'
 		expectedString2 = 'M. L. K.'
-		# print(aph.seperateInitials(testString2))
-		self.assertTrue(expectedString1 == aph.seperateInitials(testString1))
-		self.assertTrue(expectedString2 == aph.seperateInitials(testString2))
+		# print(aph.separateInitials(testString2))
+		self.assertTrue(expectedString1 == aph.separateInitials(testString1))
+		self.assertTrue(expectedString2 == aph.separateInitials(testString2))
 
 	def testSwapCharHappyCase(self):
 		testDict = {}

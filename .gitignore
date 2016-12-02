@@ -2,3 +2,5 @@
 
 *.postgres
 *.csv
+
+__pycache__

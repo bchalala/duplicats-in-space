@@ -2,6 +2,8 @@ import unicodedata # For accents removing
 import collections
 import re # For checkMistakeNames function
 
+
+
 def removeAccents(dataToTranslate):
 	"""Two function to remove accents, either one should work.
 	This is for testing which one runs faster.	"""
@@ -254,8 +256,8 @@ def generateNamesWithInitials(nameString):
 
 	return stringWithInitials
 
-def seperateInitials(nameString):
-	""" A function that seperate the names MK Martin to M K Martin. 
+def separateInitials(nameString):
+	""" A function that separate the names MK Martin to M K Martin. 
 	Here is each character in it's partial is in caps, then we assume it to be multiple initials
 	******Notice we should run this function before we are converting cases!!!"""
 	wordArray = nameString.split()
@@ -291,3 +293,9 @@ def swapCharacterWithinNames(nameString, nameDict):
 	return nameString
 
 
+def cleanUpName(dataToTranslate):
+	cleanedName = removeAccents(dataToTranslate)
+	cleanedName = removeNonalphanum(cleanedName)
+	cleanedName = SpecialCharCases(cleanedName)
+	cleanedName = separateInitials(cleanedName)
+	return cleanedName.lower()

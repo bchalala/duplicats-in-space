@@ -5,6 +5,7 @@ import csv
 from unidecode import unidecode
 import prefixScan
 import re
+import authorParserHelper as aph
 
 dataDirectory = "sampleData/"
 
@@ -26,6 +27,9 @@ def matchingPaperIds():
         for row in reader:
             title = row['Title']
             paperId = row['Id']
+
+            title = aph.removeAccents(title)
+            title = aph.removeNonalphanum(title)
 
             if title is "":
                 continue   
@@ -63,8 +67,7 @@ def getPaperAuthorsFromSet(paperIdSet):
         for row in reader:
             paperId = row['PaperId']
             authorId = row['AuthorId']
-            authorName = unidecode(row['Name'])
-            authorName = authorName.lower()
+            authorName = aph.cleanUpName(row['Name'])
             if int(paperId) in paperIdSet:
                 if paperId in pidToAuthor:
                     pidToAuthor[paperId].append((authorId, authorName))
