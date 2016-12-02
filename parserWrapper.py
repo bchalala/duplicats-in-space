@@ -4,9 +4,18 @@ import titleParserHelper as tph
 import affParserHelper as affp
 import authorParserHelper as aph
 
-authorFilePath = 'sampleData/Author.csv'
-paperAuthorFilePath = 'sampleData/PaperAuthor.csv'
-paperFilePath = 'sampleData/Paper.csv'
+## For time optimization and progress bar
+import time
+from progress.bar import Bar
+
+start_time = time.time()
+
+
+filePath1 = 'sampleData/'
+filePath2 = 'dataRev2/'
+authorFilePath = filePath1 + 'Author.csv'
+paperAuthorFilePath = filePath1 + 'PaperAuthor.csv'
+paperFilePath = filePath1 + 'Paper.csv'
 
 authorDataframe = pd.read_csv(authorFilePath)
 paperAuthorDataframe = pd.read_csv(paperAuthorFilePath)
@@ -22,6 +31,8 @@ index = 0
 print('Now processing author.csv...')
 authorDataframe['Nickname'] = 'NaN'
 frameSize = len(authorDataframe['Name'])
+
+bar = Bar('Processing', max=frameSize)
 while index < frameSize:
 
 	nameString = authorDataframe['Name'][index]
@@ -44,14 +55,21 @@ while index < frameSize:
 	authorDataframe['Name'][index] = nameString
 
 	index += 1
+	bar.next()
+
+bar.finish()
 
 ##########################################
 ## This part we clean up the paper file  #
 ##########################################
 
 print("Now processing paper.csv")
+print("Time used %s seconds " % (time.time() - start_time))
+
 index = 0
 frameSize = len(paperDataframe['Title'])
+bar = Bar('Processing', max=frameSize)
+
 while index < frameSize:
 
 	nameString = paperDataframe['Title'][index]
@@ -63,15 +81,21 @@ while index < frameSize:
 	paperDataframe['Title'][index] = nameString
 
 	index += 1
+	bar.next()
+
+bar.finish()
 
 ################################################
 ## This part we clean up the paperAuthor file  #
 ################################################
 print("Now processing paperAuthor.csv")
+print("Time used %s seconds " % (time.time() - start_time))
 
 paperAuthorDataframe['Nickname'] = 'NaN'
 index = 0
 frameSize = len(paperAuthorDataframe['Name'])
+
+bar = Bar('Processing', max=frameSize)
 while index < frameSize:
 
 	nameString = paperAuthorDataframe['Name'][index]
@@ -94,9 +118,14 @@ while index < frameSize:
 	paperAuthorDataframe['Name'][index] = nameString
 
 	index += 1
+	bar.next()
+bar.finish()
+
 
 paperAuthorDataframe['AffAlias'] = 'NaN'
 frameSize = len(paperAuthorDataframe['Affiliation'])
+
+bar = Bar('Processing', max=frameSize)
 while index < frameSize:
 
 	affString = paperAuthorDataframe['Affiliation'][index]
@@ -108,7 +137,11 @@ while index < frameSize:
 	paperAuthorDataframe['AffAlias'] = affAlias
 
 	index += 1
+	bar.next()
 
+bar.finish()
+
+print("Time used %s seconds " % (time.time() - start_time))
 
 authorDataframe.to_csv('PrunedAuthor.csv')
 paperAuthorDataframe.to_csv('PrunedPaperAuthor.csv')
