@@ -116,3 +116,13 @@ For each row of author, we add another column that contains a list of possible n
 Would think hash table makes the most sense here but I haven't really put 300MB of data into a hasbtable before so... I think the key would be Author names and value would be ID. It would be something non-injective
 
 Not sure how to go about it yet... 
+
+****************************************************************************************
+Unaccounted cases 
+****************************************************************************************
+
+77865: Abram Hindle Zheming, it's actuall two people 
+78317: Labein. Nick R. Jennings --> missing last name
+12840: T. Va't Hof misspelled
+
+papreAuthor : 29272 --> does it count as duplicate? 
