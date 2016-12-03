@@ -14,7 +14,7 @@ answerFileName = "answer.txt"
 # Prefixscan variables
 minsupport = 2
 highThreshold = .85
-lowThreshold = .4
+lowThreshold = .50
 
 
 from progress.bar import Bar
@@ -39,6 +39,13 @@ def authorList():
     availablePaperIds = pidToAuthorIds.keys()
 
     theList = authorsToAuthors(availableAuthorIds) # actually a dict
+
+    (nameToAid, dupNames) = matchSameAuthorNames()
+    for name in dupNames:
+        sameIds = nameToAid[name]
+        print(sameIds)
+        for aid in sameIds:
+            theList[aid] |= set(sameIds)
 
     paperCount = 0
     print("comparing authors...")
@@ -131,6 +138,7 @@ def authorList():
 
         # If the list is a single element or less, then no need to compare.
         if len(prefixGroupWithID) <= 1:
+            bar.next()
             continue
         else:
             prefixGroupNoID.sort(key=len)
@@ -154,9 +162,9 @@ def authorList():
                     theList[authorId2].add(authorId1)
                     prefixGroupWithID.remove((authorName1, authorId1))
                     prefixGroupNoID.remove(authorName1)
-                    print("pruned and unified long name:")
-                    print("  " + authorName1 + "(" + authorId1 + ")")
-                    print("  " + authorName2 + "(" + authorId2 + ")")
+                    #print("pruned and unified long name:")
+                    #print("  " + authorName1 + "(" + authorId1 + ")")
+                    #print("  " + authorName2 + "(" + authorId2 + ")")
 
         # Step 3
         # compare authors (maybe mine patterns in all names before compare loop)
@@ -312,6 +320,33 @@ def authors():
             author = {"name": authorName, "affiliation": authorAffiliation, "id": authorId}
             aidToAuthor[authorId] = author
 
+    return aidToAuthor
+
+
+def matchSameAuthorNames():
+    nameToAid = dict()
+    duplicates = set()
+
+    with open(dataDirectory + "Author.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            authorName = aph.cleanUpName(row['Name'])
+            authorAffiliation = row['Affiliation']
+
+            # TO DO: clean up author affiliation
+            # authorAffiliation = cleanedAffiliation(authorAffiliation)
+
+            authorId = row['Id']
+            author = {"name": authorName, "affiliation": authorAffiliation, "id": authorId}
+
+            if authorName in nameToAid:
+                duplicates.add(authorName)
+                nameToAid[authorName].append(authorId)
+            else:
+                nameToAid[authorName] = [authorId]
+
+    return (nameToAid, duplicates)
+
     ## TO DO: should we include unknown authors from PaperAuthor?
     ## brett says no
     # with open(dataDirectory + "PaperAuthor.csv") as csvfile:
@@ -322,7 +357,7 @@ def authors():
     #             author = {"name": row['Name'], "affiliation": "", "id": authorId}
     #             aidToAuthor[authorId] = author
 
-    return aidToAuthor
+    
 
 '''
     Returns new `theList` with all authors marked with themselves as duplicates: {authorId: {"name": "...", "id": "1"}}
@@ -421,7 +456,6 @@ def isNameInOther(name1, name2, threshold):
         return True
     else:
         return False
-
 
 
 
